@@ -53,7 +53,7 @@ targets:
     sources:
       - path: QingYin
         excludes:
-          - Info.plist
+          - Info*.plist
     settings:
       base:
         INFOPLIST_FILE: QingYin/Info.plist
@@ -68,7 +68,7 @@ targets:
         # 启用 iCloud 同步时需要设置:
         # CODE_SIGN_ENTITLEMENTS: QingYin/QingYin.entitlements
     info:
-      path: QingYin/Info.plist
+      path: QingYin/Info-macOS.plist
       properties:
         CFBundleName: QingYin
         CFBundleDisplayName: 清音
@@ -78,5 +78,4 @@ targets:
     dependencies:
       - sdk: SwiftUI.framework
       - sdk: AVFoundation.framework
-      - sdk: MediaPlayer.framework
       - sdk: Combine.framework

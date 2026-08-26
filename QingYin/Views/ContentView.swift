@@ -56,6 +56,7 @@ struct iOSContentView: View {
 
 // MARK: - macOS View
 struct MacContentView: View {
+    @EnvironmentObject var libraryViewModel: LibraryViewModel
     @State private var selectedSection: MacSidebarSection = .songs
     
     enum MacSidebarSection: String, CaseIterable, Identifiable {
@@ -64,6 +65,7 @@ struct MacContentView: View {
         case artists = "艺术家"
         case favorites = "我喜欢的"
         case playlists = "播放列表"
+        case equalizer = "均衡器"
         case settings = "设置"
         
         var id: String { rawValue }
@@ -74,6 +76,7 @@ struct MacContentView: View {
             case .artists: return "person"
             case .favorites: return "heart"
             case .playlists: return "list.bullet"
+            case .equalizer: return "slider.vertical.3"
             case .settings: return "gearshape"
             }
         }
@@ -106,6 +109,9 @@ struct MacContentView: View {
                                 isSelected: selectedSection == section
                             ) {
                                 selectedSection = section
+                                if section != .songs {
+                                    libraryViewModel.clearFilter()
+                                }
                             }
                         }
                     }
@@ -133,6 +139,15 @@ struct MacContentView: View {
                         isSelected: selectedSection == .favorites
                     ) {
                         selectedSection = .favorites
+                    }
+                    .padding(.bottom, 8)
+
+                    MacSidebarItem(
+                        icon: "slider.vertical.3",
+                        title: "均衡器",
+                        isSelected: selectedSection == .equalizer
+                    ) {
+                        selectedSection = .equalizer
                     }
                     .padding(.bottom, 8)
                     
@@ -174,6 +189,8 @@ struct MacContentView: View {
             FavoritesView()
         case .playlists:
             PlaylistView()
+        case .equalizer:
+            EqualizerView(showsDismissButton: false)
         case .settings:
             SettingsView()
         }

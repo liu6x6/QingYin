@@ -7,6 +7,42 @@ import AppKit
 import UIKit
 #endif
 
+struct MusicAlbum: Identifiable {
+    let title: String
+    let artist: String
+    let songs: [Song]
+
+    var id: String { "\(artist)\u{1F}\(title)" }
+    var songCount: Int { songs.count }
+    var totalDuration: TimeInterval { songs.reduce(0) { $0 + $1.duration } }
+    var artwork: Image? { songs.compactMap(\.artwork).first }
+}
+
+struct MusicArtist: Identifiable {
+    let name: String
+    let songs: [Song]
+
+    var id: String { name }
+    var songCount: Int { songs.count }
+    var totalDuration: TimeInterval { songs.reduce(0) { $0 + $1.duration } }
+    var albums: [MusicAlbum] {
+        let grouped = Dictionary(grouping: songs.filter { !$0.album.isEmpty }, by: \.album)
+        return grouped.values.compactMap { songs in
+            guard let firstSong = songs.first else { return nil }
+            return MusicAlbum(
+                title: firstSong.album,
+                artist: name,
+                songs: songs.sorted {
+                    $0.title.localizedStandardCompare($1.title) == .orderedAscending
+                }
+            )
+        }
+        .sorted {
+            $0.title.localizedStandardCompare($1.title) == .orderedAscending
+        }
+    }
+}
+
 struct Song: Identifiable, Equatable, Hashable {
     let id: UUID
     let title: String

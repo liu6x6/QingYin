@@ -112,6 +112,14 @@ struct MacPlayerBar: View {
             
             // 右侧：音量
             HStack(spacing: 8) {
+                Button(action: { showEqualizer = true }) {
+                    Image(systemName: "slider.vertical.3")
+                        .font(.system(size: 12))
+                        .foregroundColor(playerViewModel.equalizerSettings.isEnabled ? QingYinColors.cobalt : QingYinColors.inkMist)
+                }
+                .buttonStyle(.plain)
+                .help("均衡器")
+
                 Image(systemName: "speaker.wave.2.fill")
                     .font(.system(size: 11))
                     .foregroundColor(QingYinColors.inkMist)
@@ -136,7 +144,12 @@ struct MacPlayerBar: View {
                 .frame(height: 1)
             , alignment: .top
         )
+        .sheet(isPresented: $showEqualizer) {
+            EqualizerView()
+        }
     }
+
+    @State private var showEqualizer = false
     
     private var repeatImageName: String {
         switch playerViewModel.repeatMode {

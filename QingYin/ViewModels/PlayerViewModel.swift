@@ -17,6 +17,7 @@ final class PlayerViewModel: ObservableObject {
     @Published var volume: Float = 1.0
     @Published var isShuffleOn: Bool = false
     @Published var repeatMode: RepeatMode = .off
+    @Published var equalizerSettings: EqualizerSettings = .default
     
     private var cancellables = Set<AnyCancellable>()
     let player = AudioPlayerManager.shared
@@ -45,6 +46,8 @@ final class PlayerViewModel: ObservableObject {
             .assign(to: &$isShuffleOn)
         player.$repeatMode
             .assign(to: &$repeatMode)
+        player.$equalizerSettings
+            .assign(to: &$equalizerSettings)
     }
     
     var currentSong: Song? {
@@ -73,5 +76,25 @@ final class PlayerViewModel: ObservableObject {
     
     func seek(to progress: Double) {
         player.seek(to: progress)
+    }
+
+    func setEqualizerEnabled(_ isEnabled: Bool) {
+        player.setEqualizerEnabled(isEnabled)
+    }
+
+    func selectEqualizerPreset(_ preset: EqualizerPreset) {
+        player.selectEqualizerPreset(preset)
+    }
+
+    func setEqualizerGain(_ gain: Float, at index: Int) {
+        player.setEqualizerGain(gain, at: index)
+    }
+
+    func setPreampGain(_ gain: Float) {
+        player.setPreampGain(gain)
+    }
+
+    func resetEqualizer() {
+        player.resetEqualizer()
     }
 }

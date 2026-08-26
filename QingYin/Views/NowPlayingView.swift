@@ -11,6 +11,7 @@ struct NowPlayingView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showLyrics = false
     @State private var showQueue = false
+    @State private var showEqualizer = false
     @State private var showErrorAlert = false
     
     var body: some View {
@@ -36,7 +37,7 @@ struct NowPlayingView: View {
                     
                     Spacer()
                     
-                    Button(action: {}) {
+                    Button(action: { showEqualizer = true }) {
                         Image(systemName: "ellipsis")
                             .font(.system(size: 14))
                             .foregroundColor(QingYinColors.inkMist)
@@ -215,8 +216,8 @@ struct NowPlayingView: View {
         .sheet(isPresented: $showQueue) {
             QueueView()
         }
-        .sheet(isPresented: $showQueue) {
-            QueueView()
+        .sheet(isPresented: $showEqualizer) {
+            EqualizerView()
         }
         .onChange(of: playerViewModel.player.errorMessage) { newValue in
             if newValue != nil {

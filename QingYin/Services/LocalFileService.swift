@@ -36,8 +36,10 @@ final class LocalFileService: ObservableObject {
         .mpeg4Audio,
         .wav,
         .aiff,
-        UTType(importedAs: "public.flac"),
-        UTType(importedAs: "public.audio")
+        UTType.audio,
+        UTType("public.flac")
+//        UTType(importedAs: "public.flac"),
+//        UTType(importedAs: "public.audio")
     ].compactMap { $0 }
     
     /// 音频文件存放目录

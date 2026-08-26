@@ -16,6 +16,7 @@ final class LibraryViewModel: ObservableObject {
     @Published var favoriteIDs: Set<UUID> = []
     @Published var sortKey: SortKey = .none
     @Published var sortAscending: Bool = true
+    @Published var appleMusicScanResult: String?
     
     enum SortKey: String, CaseIterable {
         case none
@@ -55,6 +56,9 @@ final class LibraryViewModel: ObservableObject {
     init() {
         setupBindings()
         loadSampleData()
+        #if os(macOS)
+        libraryService.restoreCachedMacOSLibrary()
+        #endif
         restoreFavorites()
         restoreLocalPlaylists()
         
@@ -91,8 +95,34 @@ final class LibraryViewModel: ObservableObject {
     }
     
     func requestLibraryAccess() {
+        #if os(macOS)
+        scanAppleMusicLocalLibrary()
+        #else
         libraryService.requestAuthorization()
+        #endif
     }
+
+    #if os(macOS)
+    func scanAppleMusicLocalLibrary() {
+        libraryService.loadSystemLibrary()
+        let scannedSongs = libraryService.songs
+        songs = scannedSongs
+
+        guard !scannedSongs.isEmpty else {
+            appleMusicScanResult = "未找到可导入的 Apple Music 本地音乐。"
+            return
+        }
+
+        let playlistName = "Apple Music"
+        if let index = playlists.firstIndex(where: { $0.name == playlistName }) {
+            playlists[index].songIDs = scannedSongs.map(\.id)
+        } else {
+            playlists.append(Playlist(name: playlistName, songIDs: scannedSongs.map(\.id)))
+        }
+        savePlaylists()
+        appleMusicScanResult = "已将 \(scannedSongs.count) 首本地音乐同步到“Apple Music”列表。"
+    }
+    #endif
     
     // MARK: - Local Files
     /// 导入音频文件，返回新导入的歌曲（已去重）
@@ -106,7 +136,7 @@ final class LibraryViewModel: ObservableObject {
         return newSongs
     }
     
-    var allSongs: [Song] {
+    private var availableSongs: [Song] {
         // 优先显示本地导入 + 系统库 + 示例
         var combined = songs
         if !libraryService.songs.isEmpty {
@@ -133,6 +163,12 @@ final class LibraryViewModel: ObservableObject {
             }
         }
         
+        return combined
+    }
+
+    var allSongs: [Song] {
+        var combined = availableSongs
+
         // 应用筛选
         switch activeFilter {
         case .all:
@@ -186,29 +222,94 @@ final class LibraryViewModel: ObservableObject {
     }
     
     var albums: [String] {
-        Array(Set(allSongs.map { $0.album })).filter { !$0.isEmpty }.sorted()
+        libraryAlbums.map(\.title)
+    }
+
+    var libraryAlbums: [MusicAlbum] {
+        let grouped = Dictionary(grouping: availableSongs.filter { !$0.album.isEmpty }) {
+            "\($0.artist)\u{1F}\($0.album)"
+        }
+
+        return grouped.values.compactMap { songs in
+            guard let firstSong = songs.first else { return nil }
+            return MusicAlbum(
+                title: firstSong.album,
+                artist: firstSong.artist,
+                songs: songs.sorted {
+                    $0.title.localizedStandardCompare($1.title) == .orderedAscending
+                }
+            )
+        }
+        .sorted {
+            let titleOrder = $0.title.localizedStandardCompare($1.title)
+            return titleOrder == .orderedSame
+                ? $0.artist.localizedStandardCompare($1.artist) == .orderedAscending
+                : titleOrder == .orderedAscending
+        }
     }
     
     var artists: [String] {
-        Array(Set(allSongs.map { $0.artist })).sorted()
+        libraryArtists.map(\.name)
+    }
+
+    var libraryArtists: [MusicArtist] {
+        Dictionary(grouping: availableSongs, by: \.artist)
+            .map { MusicArtist(name: $0.key, songs: $0.value.sorted {
+                $0.title.localizedStandardCompare($1.title) == .orderedAscending
+            }) }
+            .sorted {
+                $0.name.localizedStandardCompare($1.name) == .orderedAscending
+            }
     }
     
     func songs(forAlbum album: String) -> [Song] {
-        allSongs.filter { $0.album == album }
+        availableSongs.filter { $0.album == album }
     }
     
     func songs(forArtist artist: String) -> [Song] {
-        allSongs.filter { $0.artist == artist }
+        availableSongs.filter { $0.artist == artist }
     }
     
-    func createPlaylist(name: String) {
-        let playlist = Playlist(name: name)
+    @discardableResult
+    func createPlaylist(name: String) -> Bool {
+        let normalizedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalizedName.isEmpty,
+              !playlists.contains(where: { $0.name.localizedCaseInsensitiveCompare(normalizedName) == .orderedSame }) else {
+            return false
+        }
+        let playlist = Playlist(name: normalizedName)
         playlists.append(playlist)
         savePlaylists()
+        return true
     }
     
     func updatePlaylists(_ newPlaylists: [Playlist]) {
         playlists = newPlaylists
+        savePlaylists()
+    }
+
+    func songs(in playlist: Playlist) -> [Song] {
+        let songsByID = Dictionary(uniqueKeysWithValues: availableSongs.map { ($0.id, $0) })
+        return playlist.songIDs.compactMap { songsByID[$0] }
+    }
+
+    func renamePlaylist(_ playlist: Playlist, to name: String) -> Bool {
+        let normalizedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalizedName.isEmpty,
+              !playlists.contains(where: {
+                  $0.id != playlist.id &&
+                  $0.name.localizedCaseInsensitiveCompare(normalizedName) == .orderedSame
+              }),
+              let index = playlists.firstIndex(where: { $0.id == playlist.id }) else {
+            return false
+        }
+        playlists[index].name = normalizedName
+        savePlaylists()
+        return true
+    }
+
+    func deletePlaylist(_ playlist: Playlist) {
+        playlists.removeAll { $0.id == playlist.id }
         savePlaylists()
     }
     
@@ -338,12 +439,17 @@ final class LibraryViewModel: ObservableObject {
             savePlaylists()
         }
     }
+
+    func removeSong(_ song: Song, from playlist: Playlist) {
+        guard let index = playlists.firstIndex(where: { $0.id == playlist.id }) else { return }
+        playlists[index].removeSong(song)
+        savePlaylists()
+    }
     
     // MARK: - Sample Data
     private func loadSampleData() {
         #if DEBUG
         songs = Song.sampleSongs
-        playlists = Playlist.samplePlaylists
         #endif
     }
 }

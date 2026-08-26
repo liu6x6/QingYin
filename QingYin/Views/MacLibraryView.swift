@@ -15,6 +15,8 @@ struct MacLibraryView: View {
     @State private var showingFileImporter = false
     @State private var selectedSongIDs: Set<UUID> = []
     @State private var showingAddToPlaylist = false
+    @State private var songsToAddToPlaylist: [Song] = []
+    @State private var clearsSelectionAfterAdding = false
     @State private var isDropTargeted = false
     
     // 列顺序
@@ -53,7 +55,9 @@ struct MacLibraryView: View {
         let fixedTotal = columnOrder.reduce(CGFloat(0)) { sum, col in
             sum + (col.isFlexible ? 0 : (columnWidths[col] ?? 80))
         }
-        let remaining = max(80, available - fixedTotal)
+        // 弹性列取剩余空间和用户设置宽度的较大值
+        let flexMinWidth = columnOrder.first(where: { $0.isFlexible }).flatMap { columnWidths[$0] } ?? 80
+        let remaining = max(flexMinWidth, available - fixedTotal)
         var result = columnWidths
         if let flexCol = columnOrder.first(where: { $0.isFlexible }) {
             result[flexCol] = remaining
@@ -240,11 +244,11 @@ struct MacLibraryView: View {
             return true
         }
         .sheet(isPresented: $showingAddToPlaylist) {
-            AddToPlaylistSheet(songs: selectedSongs) { playlist in
-                for song in selectedSongs {
-                    libraryViewModel.addSongsToPlaylist([song], playlist: playlist)
+            AddToPlaylistSheet(songs: songsToAddToPlaylist) { playlist in
+                libraryViewModel.addSongsToPlaylist(songsToAddToPlaylist, playlist: playlist)
+                if clearsSelectionAfterAdding {
+                    selectedSongIDs.removeAll()
                 }
-                selectedSongIDs.removeAll()
             }
         }
     }
@@ -325,7 +329,9 @@ struct MacLibraryView: View {
     }
     
     private func headerCell(for column: Column, widths: [Column: CGFloat]) -> some View {
-        HStack(spacing: 0) {
+        let colWidth = widths[column] ?? 80
+        
+        return HStack(spacing: 0) {
             Text(column.rawValue)
                 .font(.system(size: 11, weight: .medium))
                 .foregroundColor(QingYinColors.inkMist)
@@ -338,40 +344,13 @@ struct MacLibraryView: View {
                     .padding(.leading, 2)
             }
             
-            Spacer()
+            Spacer(minLength: 4)
             
-            if column.isResizable && !column.isFlexible {
-                Rectangle()
-                    .fill(QingYinColors.cobalt.opacity(0.2))
-                    .frame(width: 1)
-                    .frame(width: 8)
-                    .contentShape(Rectangle())
-                    .onHover { hovering in
-                        if hovering {
-                            NSCursor.resizeLeftRight.push()
-                        } else {
-                            NSCursor.pop()
-                        }
-                    }
-                    .gesture(
-                        DragGesture(minimumDistance: 0)
-                            .onChanged { value in
-                                if resizingColumn == nil {
-                                    resizingColumn = column
-                                    resizeStartX = value.location.x
-                                    resizeStartWidth = columnWidths[column] ?? 80
-                                }
-                                let delta = value.location.x - resizeStartX
-                                columnWidths[column] = max(40, resizeStartWidth + delta)
-                            }
-                            .onEnded { _ in
-                                resizingColumn = nil
-                                saveColumnSettings()
-                            }
-                    )
+            if column.isResizable {
+                resizeHandle(for: column)
             }
         }
-        .frame(width: widths[column] ?? 80, alignment: .leading)
+        .frame(width: colWidth, alignment: .leading)
         .contentShape(Rectangle())
         .background(draggingColumn == column ? QingYinColors.cobaltGhost : Color.clear)
         .onTapGesture {
@@ -384,6 +363,44 @@ struct MacLibraryView: View {
                 .onChanged { _ in }
                 .onEnded { value in
                     handleColumnReorder(column: column, translation: value.translation.width)
+                }
+        )
+    }
+    
+    private func resizeHandle(for column: Column) -> some View {
+        ZStack {
+            // 可见分隔线 1pt
+            Rectangle()
+                .fill(QingYinColors.cobalt.opacity(0.15))
+                .frame(width: 1)
+            
+            // 透明触摸区域 10pt（确保容易点到）
+            Rectangle()
+                .fill(Color.clear)
+                .frame(width: 10)
+                .contentShape(Rectangle())
+        }
+        .onHover { hovering in
+            if hovering {
+                NSCursor.resizeLeftRight.push()
+            } else {
+                NSCursor.pop()
+            }
+        }
+        .highPriorityGesture(
+            DragGesture(minimumDistance: 1)
+                .onChanged { value in
+                    if resizingColumn == nil {
+                        resizingColumn = column
+                        resizeStartX = value.startLocation.x
+                        resizeStartWidth = columnWidths[column] ?? 80
+                    }
+                    let delta = value.location.x - resizeStartX
+                    columnWidths[column] = max(80, resizeStartWidth + delta)
+                }
+                .onEnded { _ in
+                    resizingColumn = nil
+                    saveColumnSettings()
                 }
         )
     }
@@ -432,6 +449,11 @@ struct MacLibraryView: View {
                         },
                         onPlay: {
                             playerViewModel.play(song: song, queue: libraryViewModel.filteredSongs)
+                        },
+                        onAddToPlaylist: {
+                            songsToAddToPlaylist = [song]
+                            clearsSelectionAfterAdding = false
+                            showingAddToPlaylist = true
                         }
                     )
                 }
@@ -584,6 +606,7 @@ struct MacSongRow: View {
     let columnOrder: [MacLibraryView.Column]
     let onSelect: (NSEvent.ModifierFlags) -> Void
     let onPlay: () -> Void
+    let onAddToPlaylist: () -> Void
     
     @EnvironmentObject var playerViewModel: PlayerViewModel
     @EnvironmentObject var libraryViewModel: LibraryViewModel
@@ -741,6 +764,10 @@ struct MacSongRow: View {
         
         Button(action: { libraryViewModel.playNext(song) }) {
             Label("下一首播放", systemImage: "text.insert")
+        }
+
+        Button(action: onAddToPlaylist) {
+            Label("添加到播放列表", systemImage: "text.badge.plus")
         }
         
         Divider()

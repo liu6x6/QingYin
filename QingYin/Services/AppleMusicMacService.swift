@@ -12,6 +12,17 @@ import AppKit
 @MainActor
 final class AppleMusicMacService {
     static let shared = AppleMusicMacService()
+
+    private struct CachedSong: Codable {
+        let id: UUID
+        let title: String
+        let artist: String
+        let album: String
+        let duration: TimeInterval
+        let filePath: String
+    }
+
+    private let cacheKey = "qingyin.appleMusicLocalLibrary"
     
     private init() {}
     
@@ -33,6 +44,46 @@ final class AppleMusicMacService {
         }
         
         return songs
+    }
+
+    /// 恢复上次扫描的索引，避免每次启动都遍历 Apple Music 文件夹。
+    func restoreCachedLibrary() -> [Song] {
+        guard let data = UserDefaults.standard.data(forKey: cacheKey),
+              let cachedSongs = try? JSONDecoder().decode([CachedSong].self, from: data) else {
+            return []
+        }
+
+        return cachedSongs.compactMap { cachedSong in
+            let url = URL(fileURLWithPath: cachedSong.filePath)
+            guard FileManager.default.fileExists(atPath: url.path) else { return nil }
+            return Song(
+                id: cachedSong.id,
+                title: cachedSong.title,
+                artist: cachedSong.artist,
+                album: cachedSong.album,
+                duration: cachedSong.duration,
+                assetURL: url,
+                lyrics: nil,
+                artworkImage: nil
+            )
+        }
+    }
+
+    func cacheLibrary(_ songs: [Song]) {
+        let cachedSongs = songs.compactMap { song -> CachedSong? in
+            guard let url = song.assetURL else { return nil }
+            return CachedSong(
+                id: song.id,
+                title: song.title,
+                artist: song.artist,
+                album: song.album,
+                duration: song.duration,
+                filePath: url.path
+            )
+        }
+
+        guard let data = try? JSONEncoder().encode(cachedSongs) else { return }
+        UserDefaults.standard.set(data, forKey: cacheKey)
     }
     
     private var homePath: URL {

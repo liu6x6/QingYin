@@ -4,8 +4,11 @@
 //
 
 import Foundation
-import MediaPlayer
 import Combine
+
+#if os(iOS)
+import MediaPlayer
+#endif
 
 enum LibraryAuthorizationStatus {
     case notDetermined
@@ -70,7 +73,14 @@ final class MusicLibraryService: ObservableObject {
         isLoading = true
         let appleMusicSongs = AppleMusicMacService.shared.scanAppleMusicLibrary()
         songs = appleMusicSongs
+        if !appleMusicSongs.isEmpty {
+            AppleMusicMacService.shared.cacheLibrary(appleMusicSongs)
+        }
         isLoading = false
+    }
+
+    func restoreCachedMacOSLibrary() {
+        songs = AppleMusicMacService.shared.restoreCachedLibrary()
     }
     #endif
     

@@ -20,7 +20,7 @@ struct LibraryView: View {
                     HStack(spacing: 10) {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(QingYinColors.inkMist)
-                        TextField("搜索歌曲、艺术家...", text: $libraryViewModel.searchText)
+                        TextField("搜索歌曲、艺术家、专辑...", text: $libraryViewModel.searchText)
                             .font(.system(size: 14))
                     }
                     .padding(10)
@@ -70,19 +70,25 @@ struct LibraryView: View {
                     .padding(.horizontal, 16)
                     .padding(.bottom, 8)
                 
-                // 歌曲列表
-                List {
-                    ForEach(libraryViewModel.filteredSongs) { song in
-                        SongRow(song: song)
-                            .listRowBackground(QingYinColors.porcelain)
-                            .listRowSeparator(.hidden)
-                            .onTapGesture {
-                                playerViewModel.play(song: song, queue: libraryViewModel.filteredSongs)
-                            }
+                switch libraryViewModel.selectedFilter {
+                case .songs:
+                    List {
+                        ForEach(libraryViewModel.filteredSongs) { song in
+                            SongRow(song: song)
+                                .listRowBackground(QingYinColors.porcelain)
+                                .listRowSeparator(.hidden)
+                                .onTapGesture {
+                                    playerViewModel.play(song: song, queue: libraryViewModel.filteredSongs)
+                                }
+                        }
                     }
+                    .listStyle(.plain)
+                    .background(QingYinColors.porcelain)
+                case .albums:
+                    AlbumListView(showsTitle: false)
+                case .artists:
+                    ArtistListView(showsTitle: false)
                 }
-                .listStyle(.plain)
-                .background(QingYinColors.porcelain)
             }
         }
         .sheet(isPresented: $playerViewModel.isNowPlayingPresented) {
@@ -111,6 +117,7 @@ struct LibraryView: View {
 struct SongRow: View {
     let song: Song
     @EnvironmentObject var playerViewModel: PlayerViewModel
+    @EnvironmentObject var libraryViewModel: LibraryViewModel
     
     var isPlaying: Bool {
         playerViewModel.currentSong?.id == song.id && playerViewModel.isPlaying
@@ -157,6 +164,22 @@ struct SongRow: View {
             }
         }
         .padding(.vertical, 6)
+        .contentShape(Rectangle())
+        .contextMenu {
+            Menu {
+                if libraryViewModel.playlists.isEmpty {
+                    Text("请先新建播放列表")
+                } else {
+                    ForEach(libraryViewModel.playlists) { playlist in
+                        Button(playlist.name) {
+                            libraryViewModel.addSongsToPlaylist([song], playlist: playlist)
+                        }
+                    }
+                }
+            } label: {
+                Label("添加到播放列表", systemImage: "text.badge.plus")
+            }
+        }
     }
     
     private var songArtColor: Color {

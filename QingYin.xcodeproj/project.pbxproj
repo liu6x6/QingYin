@@ -49,6 +49,10 @@
 		B6E6F6E71B464D860108FF74 /* MacPlayerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB289A5BC6F4E28D3BC85B82 /* MacPlayerBar.swift */; };
 		B7A2A63D20F2A64D72CA8334 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA3FD85EFA4193592DBEAB7 /* Playlist.swift */; };
 		B9D8FFED90DDCC09649281C0 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C168F6DFC88943B88FB6ED0A /* MiniPlayerView.swift */; };
+		C0E100000000000000000001 /* EqualizerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E100000000000000000002 /* EqualizerSettings.swift */; };
+		C0E100000000000000000003 /* EqualizerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E100000000000000000002 /* EqualizerSettings.swift */; };
+		C0E100000000000000000004 /* EqualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E100000000000000000005 /* EqualizerView.swift */; };
+		C0E100000000000000000006 /* EqualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E100000000000000000005 /* EqualizerView.swift */; };
 		C630AB221252E0653C1F99B5 /* AudioMetadataExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228DCA074D0D8870F4484ED1 /* AudioMetadataExtractor.swift */; };
 		C7B63735562C5DA955B36259 /* LibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1632ADFA30D840413C27A35 /* LibraryViewModel.swift */; };
 		C7DFF092A8139F19D87A2D05 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C168F6DFC88943B88FB6ED0A /* MiniPlayerView.swift */; };
@@ -89,6 +93,8 @@
 		B1ABF7F8E3AFF14BC9D5642D /* MacLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLibraryView.swift; sourceTree = "<group>"; };
 		B6DFC35C91C58FB0CC48F96E /* Combine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Combine.framework; path = System/Library/Frameworks/Combine.framework; sourceTree = SDKROOT; };
 		BEAB6EE694CE02296EFC4DA1 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		C0E100000000000000000002 /* EqualizerSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualizerSettings.swift; sourceTree = "<group>"; };
+		C0E100000000000000000005 /* EqualizerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualizerView.swift; sourceTree = "<group>"; };
 		C168F6DFC88943B88FB6ED0A /* MiniPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
 		C8DD8E94067832D08C2DF2F4 /* AlbumListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumListView.swift; sourceTree = "<group>"; };
 		CB289A5BC6F4E28D3BC85B82 /* MacPlayerBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPlayerBar.swift; sourceTree = "<group>"; };
@@ -126,7 +132,6 @@
 			files = (
 				FBF766B40AC71620F4B3FE24 /* SwiftUI.framework in Frameworks */,
 				ADEFCCD3780269B3DF58B534 /* AVFoundation.framework in Frameworks */,
-				71E96D02CA263CB238530CEB /* MediaPlayer.framework in Frameworks */,
 				DBFEB44CF7FC7ECBABBC9F46 /* Combine.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -137,6 +142,7 @@
 		1EBB35ACE39D22C19EB4DDB6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C0E100000000000000000002 /* EqualizerSettings.swift */,
 				FAA3FD85EFA4193592DBEAB7 /* Playlist.swift */,
 				EC9F8544ACB5564AE01CAEEA /* Song.swift */,
 			);
@@ -156,6 +162,7 @@
 			children = (
 				C8DD8E94067832D08C2DF2F4 /* AlbumListView.swift */,
 				AC1A1066814263F1A86D45F6 /* ContentView.swift */,
+				C0E100000000000000000005 /* EqualizerView.swift */,
 				EF75BF52E44400CA627EC197 /* FavoritesView.swift */,
 				7B66A6FA4383E442F4699244 /* LibraryView.swift */,
 				734D25385794123B455CA970 /* LyricsView.swift */,
@@ -294,7 +301,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 2630;
 				TargetAttributes = {
 					48BB178E8010A0C23746929F = {
 						ProvisioningStyle = Manual;
@@ -346,6 +353,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				24EF8D18EFB374485A6554D6 /* AlbumListView.swift in Sources */,
+				C0E100000000000000000003 /* EqualizerSettings.swift in Sources */,
+				C0E100000000000000000006 /* EqualizerView.swift in Sources */,
 				6D484B1BC62DE1F064537910 /* AppleMusicMacService.swift in Sources */,
 				6DA2A483AF1F85DE17DC2882 /* AudioMetadataExtractor.swift in Sources */,
 				B09374F3E8FE9656061C73C4 /* AudioPlayerManager.swift in Sources */,
@@ -379,6 +388,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				20C5C247ACF84CF5CD702954 /* AlbumListView.swift in Sources */,
+				C0E100000000000000000001 /* EqualizerSettings.swift in Sources */,
+				C0E100000000000000000004 /* EqualizerView.swift in Sources */,
 				D2FCD2836C091F5C053CD605 /* AppleMusicMacService.swift in Sources */,
 				C630AB221252E0653C1F99B5 /* AudioMetadataExtractor.swift in Sources */,
 				2E061AFFA684C91839E6DA15 /* AudioPlayerManager.swift in Sources */,
@@ -448,6 +459,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readonly;
 				ENABLE_FILE_ACCESS_MUSIC_FOLDER = readonly;
@@ -462,7 +474,7 @@
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
-				INFOPLIST_FILE = QingYin/Info.plist;
+				INFOPLIST_FILE = QingYin/Info-macOS.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -509,9 +521,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -530,6 +544,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -570,9 +585,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -584,6 +601,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -599,6 +617,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readonly;
 				ENABLE_FILE_ACCESS_MUSIC_FOLDER = readonly;
@@ -613,7 +632,7 @@
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
-				INFOPLIST_FILE = QingYin/Info.plist;
+				INFOPLIST_FILE = QingYin/Info-macOS.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

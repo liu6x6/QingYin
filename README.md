@@ -129,5 +129,11 @@ open QingYin.xcodeproj
 
 - [ ] 播放历史
 - [ ] 收藏歌曲
-- [ ] 均衡器 / 音效
+- [x] 均衡器 / 音效
 - [ ] 睡眠定时器
+
+## 设计文档
+
+- [均衡器设计方案与界面设计稿](docs/equalizer-design.md)
+- [均衡器界面设计稿（SVG）](docs/equalizer-design.svg)
+- [均衡器工作原理](docs/equalizer-principles.md)

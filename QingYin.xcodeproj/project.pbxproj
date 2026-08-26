@@ -1,0 +1,691 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		14F279A74F5064A31F22C355 /* LocalFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96E3D3AB54F4D96F26F013 /* LocalFileService.swift */; };
+		20C5C247ACF84CF5CD702954 /* AlbumListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DD8E94067832D08C2DF2F4 /* AlbumListView.swift */; };
+		2137B19EB155BAC5F5C50301 /* LyricsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1778DF64E542FFCA3015853F /* LyricsParser.swift */; };
+		24EF8D18EFB374485A6554D6 /* AlbumListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DD8E94067832D08C2DF2F4 /* AlbumListView.swift */; };
+		2701E7E24143EF9C78E42DE9 /* PlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7DACB2F71BC994FDE965A22 /* PlaylistView.swift */; };
+		278B0431E95C6641BEEB5AAB /* QingYinApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D588B69833CF14B8AA799558 /* QingYinApp.swift */; };
+		2DEBDD8EA55485C601BEA749 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66A6FA4383E442F4699244 /* LibraryView.swift */; };
+		2E061AFFA684C91839E6DA15 /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197DF18F8B53C0DA35DF141 /* AudioPlayerManager.swift */; };
+		31644B14DBCD92175E82D415 /* NowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E01E009B8CE1E997F87E2B1 /* NowPlayingView.swift */; };
+		32167A5D63ECE830497ED235 /* Combine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6DFC35C91C58FB0CC48F96E /* Combine.framework */; };
+		34348BE7FC063160481EE5EF /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC5A16E0B22A48CE4773FED /* SwiftUI.framework */; };
+		38253F0F45A1F876F2516CE7 /* MacLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1ABF7F8E3AFF14BC9D5642D /* MacLibraryView.swift */; };
+		3CC075281ED2F6CE6653EB7D /* QingYinApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D588B69833CF14B8AA799558 /* QingYinApp.swift */; };
+		434E3C5E73A6BB17E8F8AF45 /* PlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7DACB2F71BC994FDE965A22 /* PlaylistView.swift */; };
+		48BC33EF9778F26682917EC0 /* MacLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1ABF7F8E3AFF14BC9D5642D /* MacLibraryView.swift */; };
+		48F9339FECE68EAABFF79F78 /* iCloudSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D83E1818B047CFFC29B19D6 /* iCloudSyncService.swift */; };
+		4C981E3884455AACCFEA8FD8 /* QueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B38ACD4853327297C4D15EE /* QueueView.swift */; };
+		5476072A4CDAD98BCD5DE86B /* LyricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734D25385794123B455CA970 /* LyricsView.swift */; };
+		5ACD19C14EDC089B7B9D8399 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF75BF52E44400CA627EC197 /* FavoritesView.swift */; };
+		5FE1157F2E2E3ACF2A13B5E3 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46989F562B5DAC4FB7FC82FF /* SearchView.swift */; };
+		6328C73EE1F80B955520E481 /* LocalFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96E3D3AB54F4D96F26F013 /* LocalFileService.swift */; };
+		6D484B1BC62DE1F064537910 /* AppleMusicMacService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952CC4760C00B79554E8C265 /* AppleMusicMacService.swift */; };
+		6DA2A483AF1F85DE17DC2882 /* AudioMetadataExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228DCA074D0D8870F4484ED1 /* AudioMetadataExtractor.swift */; };
+		71E96D02CA263CB238530CEB /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEAB6EE694CE02296EFC4DA1 /* MediaPlayer.framework */; };
+		751C8F03D64F8529A42A1ED0 /* LyricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734D25385794123B455CA970 /* LyricsView.swift */; };
+		7B22F64F6218E7225A6515A6 /* MacPlayerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB289A5BC6F4E28D3BC85B82 /* MacPlayerBar.swift */; };
+		80792126578E69E3BFC29CF0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D59728FA6A7612547FEC1D /* AVFoundation.framework */; };
+		8164F67D5B7B23A8870A006E /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEAB6EE694CE02296EFC4DA1 /* MediaPlayer.framework */; };
+		88A9B12FC8FC7AE1993DF5DC /* QueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B38ACD4853327297C4D15EE /* QueueView.swift */; };
+		914C68C88B074F773EA9B07C /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9F8544ACB5564AE01CAEEA /* Song.swift */; };
+		9217EEE17C9D5FB1F3088B05 /* QingYinColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEF202D9279E9D330103CC9 /* QingYinColors.swift */; };
+		A4726E66E7D0D5D2721886DB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1A1066814263F1A86D45F6 /* ContentView.swift */; };
+		A4C823018ECC5193044EA739 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46989F562B5DAC4FB7FC82FF /* SearchView.swift */; };
+		A56E24C067CF5F18BF9183A0 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3C4AB27AE5C98BDA5B5B49 /* PlayerViewModel.swift */; };
+		A78CD05E689E7B80D7AF60FC /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA3FD85EFA4193592DBEAB7 /* Playlist.swift */; };
+		A7E5113686F26CD523309BF6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 038E48D4BB2ABC60AEFDFA3F /* Assets.xcassets */; };
+		AABA94074C74F7AD02180466 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF75BF52E44400CA627EC197 /* FavoritesView.swift */; };
+		ADEFCCD3780269B3DF58B534 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D59728FA6A7612547FEC1D /* AVFoundation.framework */; };
+		B09374F3E8FE9656061C73C4 /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197DF18F8B53C0DA35DF141 /* AudioPlayerManager.swift */; };
+		B6E6F6E71B464D860108FF74 /* MacPlayerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB289A5BC6F4E28D3BC85B82 /* MacPlayerBar.swift */; };
+		B7A2A63D20F2A64D72CA8334 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA3FD85EFA4193592DBEAB7 /* Playlist.swift */; };
+		B9D8FFED90DDCC09649281C0 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C168F6DFC88943B88FB6ED0A /* MiniPlayerView.swift */; };
+		C630AB221252E0653C1F99B5 /* AudioMetadataExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228DCA074D0D8870F4484ED1 /* AudioMetadataExtractor.swift */; };
+		C7B63735562C5DA955B36259 /* LibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1632ADFA30D840413C27A35 /* LibraryViewModel.swift */; };
+		C7DFF092A8139F19D87A2D05 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C168F6DFC88943B88FB6ED0A /* MiniPlayerView.swift */; };
+		C895B3C805FD2FF7B2C23F8B /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9F8544ACB5564AE01CAEEA /* Song.swift */; };
+		D045DA554A96918A9CD8E6F7 /* QingYinColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEF202D9279E9D330103CC9 /* QingYinColors.swift */; };
+		D2FCD2836C091F5C053CD605 /* AppleMusicMacService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952CC4760C00B79554E8C265 /* AppleMusicMacService.swift */; };
+		D65BE600BD4D8F3E5500699D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 038E48D4BB2ABC60AEFDFA3F /* Assets.xcassets */; };
+		DBFEB44CF7FC7ECBABBC9F46 /* Combine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6DFC35C91C58FB0CC48F96E /* Combine.framework */; };
+		DC97265C43F1740BA2D9984D /* MusicLibraryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA010A90A0FC2176599FA2DB /* MusicLibraryService.swift */; };
+		E26C0D08386D1981217F8A71 /* LyricsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1778DF64E542FFCA3015853F /* LyricsParser.swift */; };
+		E48721AE0ABB07C5C86DFED0 /* LibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1632ADFA30D840413C27A35 /* LibraryViewModel.swift */; };
+		E9AB17F78E9E01A74F08C7A0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1A1066814263F1A86D45F6 /* ContentView.swift */; };
+		EB0E20367FA01552CE6C5A2A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9472BF9F0D4A04E588BC6C1 /* SettingsView.swift */; };
+		F0847AB727A041D61C9B1E9B /* iCloudSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D83E1818B047CFFC29B19D6 /* iCloudSyncService.swift */; };
+		F2DC4CD5CAD6E93F18911B7F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9472BF9F0D4A04E588BC6C1 /* SettingsView.swift */; };
+		F4A3993326AD6C88DDFF5FB6 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3C4AB27AE5C98BDA5B5B49 /* PlayerViewModel.swift */; };
+		F4B81CEC76ADA17444346C2C /* NowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E01E009B8CE1E997F87E2B1 /* NowPlayingView.swift */; };
+		FBF609F80D455EE2ACB99F19 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66A6FA4383E442F4699244 /* LibraryView.swift */; };
+		FBF766B40AC71620F4B3FE24 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC5A16E0B22A48CE4773FED /* SwiftUI.framework */; };
+		FBFCD83A4513C8CF37FBE168 /* MusicLibraryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA010A90A0FC2176599FA2DB /* MusicLibraryService.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		038E48D4BB2ABC60AEFDFA3F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1778DF64E542FFCA3015853F /* LyricsParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsParser.swift; sourceTree = "<group>"; };
+		1A6F0EECC570DDDA8C45A351 /* QingYin_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QingYin_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		228DCA074D0D8870F4484ED1 /* AudioMetadataExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMetadataExtractor.swift; sourceTree = "<group>"; };
+		2D83E1818B047CFFC29B19D6 /* iCloudSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCloudSyncService.swift; sourceTree = "<group>"; };
+		46989F562B5DAC4FB7FC82FF /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		5B38ACD4853327297C4D15EE /* QueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueView.swift; sourceTree = "<group>"; };
+		5E01E009B8CE1E997F87E2B1 /* NowPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingView.swift; sourceTree = "<group>"; };
+		734D25385794123B455CA970 /* LyricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsView.swift; sourceTree = "<group>"; };
+		7B66A6FA4383E442F4699244 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
+		952CC4760C00B79554E8C265 /* AppleMusicMacService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicMacService.swift; sourceTree = "<group>"; };
+		A1632ADFA30D840413C27A35 /* LibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModel.swift; sourceTree = "<group>"; };
+		AC1A1066814263F1A86D45F6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AE3C4AB27AE5C98BDA5B5B49 /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
+		B1ABF7F8E3AFF14BC9D5642D /* MacLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLibraryView.swift; sourceTree = "<group>"; };
+		B6DFC35C91C58FB0CC48F96E /* Combine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Combine.framework; path = System/Library/Frameworks/Combine.framework; sourceTree = SDKROOT; };
+		BEAB6EE694CE02296EFC4DA1 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		C168F6DFC88943B88FB6ED0A /* MiniPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
+		C8DD8E94067832D08C2DF2F4 /* AlbumListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumListView.swift; sourceTree = "<group>"; };
+		CB289A5BC6F4E28D3BC85B82 /* MacPlayerBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPlayerBar.swift; sourceTree = "<group>"; };
+		CEEF202D9279E9D330103CC9 /* QingYinColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QingYinColors.swift; sourceTree = "<group>"; };
+		D197DF18F8B53C0DA35DF141 /* AudioPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
+		D588B69833CF14B8AA799558 /* QingYinApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QingYinApp.swift; sourceTree = "<group>"; };
+		D8C1D0AF19227221CC8CFBBD /* QingYin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QingYin.entitlements; sourceTree = "<group>"; };
+		DA010A90A0FC2176599FA2DB /* MusicLibraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicLibraryService.swift; sourceTree = "<group>"; };
+		DAC5A16E0B22A48CE4773FED /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		E7DACB2F71BC994FDE965A22 /* PlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; };
+		E9472BF9F0D4A04E588BC6C1 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		EC9F8544ACB5564AE01CAEEA /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
+		EF75BF52E44400CA627EC197 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
+		F1D59728FA6A7612547FEC1D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		F70C79675CE89212164BF179 /* QingYin_macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QingYin_macOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA96E3D3AB54F4D96F26F013 /* LocalFileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileService.swift; sourceTree = "<group>"; };
+		FAA3FD85EFA4193592DBEAB7 /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AA522B8BD6B272FA4B760490 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34348BE7FC063160481EE5EF /* SwiftUI.framework in Frameworks */,
+				80792126578E69E3BFC29CF0 /* AVFoundation.framework in Frameworks */,
+				8164F67D5B7B23A8870A006E /* MediaPlayer.framework in Frameworks */,
+				32167A5D63ECE830497ED235 /* Combine.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D471648446439F5D09FE1A5D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FBF766B40AC71620F4B3FE24 /* SwiftUI.framework in Frameworks */,
+				ADEFCCD3780269B3DF58B534 /* AVFoundation.framework in Frameworks */,
+				71E96D02CA263CB238530CEB /* MediaPlayer.framework in Frameworks */,
+				DBFEB44CF7FC7ECBABBC9F46 /* Combine.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1EBB35ACE39D22C19EB4DDB6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FAA3FD85EFA4193592DBEAB7 /* Playlist.swift */,
+				EC9F8544ACB5564AE01CAEEA /* Song.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		39C9E227106236EB9A0E4813 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				CEEF202D9279E9D330103CC9 /* QingYinColors.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		3F0EB5DBE7AC4B2C0533DFB8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C8DD8E94067832D08C2DF2F4 /* AlbumListView.swift */,
+				AC1A1066814263F1A86D45F6 /* ContentView.swift */,
+				EF75BF52E44400CA627EC197 /* FavoritesView.swift */,
+				7B66A6FA4383E442F4699244 /* LibraryView.swift */,
+				734D25385794123B455CA970 /* LyricsView.swift */,
+				B1ABF7F8E3AFF14BC9D5642D /* MacLibraryView.swift */,
+				CB289A5BC6F4E28D3BC85B82 /* MacPlayerBar.swift */,
+				C168F6DFC88943B88FB6ED0A /* MiniPlayerView.swift */,
+				5E01E009B8CE1E997F87E2B1 /* NowPlayingView.swift */,
+				E7DACB2F71BC994FDE965A22 /* PlaylistView.swift */,
+				5B38ACD4853327297C4D15EE /* QueueView.swift */,
+				46989F562B5DAC4FB7FC82FF /* SearchView.swift */,
+				E9472BF9F0D4A04E588BC6C1 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7B9EB8035D94506B02B193E2 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A1632ADFA30D840413C27A35 /* LibraryViewModel.swift */,
+				AE3C4AB27AE5C98BDA5B5B49 /* PlayerViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		AD364B2A033713865FA0F3AB /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				952CC4760C00B79554E8C265 /* AppleMusicMacService.swift */,
+				228DCA074D0D8870F4484ED1 /* AudioMetadataExtractor.swift */,
+				D197DF18F8B53C0DA35DF141 /* AudioPlayerManager.swift */,
+				2D83E1818B047CFFC29B19D6 /* iCloudSyncService.swift */,
+				FA96E3D3AB54F4D96F26F013 /* LocalFileService.swift */,
+				1778DF64E542FFCA3015853F /* LyricsParser.swift */,
+				DA010A90A0FC2176599FA2DB /* MusicLibraryService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		BB587CC00BDD53EB5EA352DC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				038E48D4BB2ABC60AEFDFA3F /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		BCE8B4EA2F607ED22B217734 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F1D59728FA6A7612547FEC1D /* AVFoundation.framework */,
+				B6DFC35C91C58FB0CC48F96E /* Combine.framework */,
+				BEAB6EE694CE02296EFC4DA1 /* MediaPlayer.framework */,
+				DAC5A16E0B22A48CE4773FED /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DC505DADC2068F77660E0158 /* QingYin */ = {
+			isa = PBXGroup;
+			children = (
+				D8C1D0AF19227221CC8CFBBD /* QingYin.entitlements */,
+				D588B69833CF14B8AA799558 /* QingYinApp.swift */,
+				1EBB35ACE39D22C19EB4DDB6 /* Models */,
+				BB587CC00BDD53EB5EA352DC /* Resources */,
+				AD364B2A033713865FA0F3AB /* Services */,
+				39C9E227106236EB9A0E4813 /* Utilities */,
+				7B9EB8035D94506B02B193E2 /* ViewModels */,
+				3F0EB5DBE7AC4B2C0533DFB8 /* Views */,
+			);
+			path = QingYin;
+			sourceTree = "<group>";
+		};
+		E3F5735636915C740061A946 = {
+			isa = PBXGroup;
+			children = (
+				DC505DADC2068F77660E0158 /* QingYin */,
+				BCE8B4EA2F607ED22B217734 /* Frameworks */,
+				F958D3E452B8E03B5BC7BCFF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F958D3E452B8E03B5BC7BCFF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1A6F0EECC570DDDA8C45A351 /* QingYin_iOS.app */,
+				F70C79675CE89212164BF179 /* QingYin_macOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		48BB178E8010A0C23746929F /* QingYin_macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DF5955C0C21C2AA5814BB74C /* Build configuration list for PBXNativeTarget "QingYin_macOS" */;
+			buildPhases = (
+				65FD8333EE37A6205719020A /* Sources */,
+				7813CA88F5BD8DE1256914F3 /* Resources */,
+				D471648446439F5D09FE1A5D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QingYin_macOS;
+			packageProductDependencies = (
+			);
+			productName = QingYin_macOS;
+			productReference = F70C79675CE89212164BF179 /* QingYin_macOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CFB21D21ABDDD83D35BD998D /* QingYin_iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CD4AC0DC4418E540E6E46BA6 /* Build configuration list for PBXNativeTarget "QingYin_iOS" */;
+			buildPhases = (
+				282FB2A69FEDA3A22803C3BF /* Sources */,
+				A2BF5C5049988172F080942F /* Resources */,
+				AA522B8BD6B272FA4B760490 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QingYin_iOS;
+			packageProductDependencies = (
+			);
+			productName = QingYin_iOS;
+			productReference = 1A6F0EECC570DDDA8C45A351 /* QingYin_iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F6386B3ACB3A82702B5998EE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					48BB178E8010A0C23746929F = {
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 444E453A460B974AEA1C526A /* Build configuration list for PBXProject "QingYin" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = E3F5735636915C740061A946;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = F958D3E452B8E03B5BC7BCFF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CFB21D21ABDDD83D35BD998D /* QingYin_iOS */,
+				48BB178E8010A0C23746929F /* QingYin_macOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7813CA88F5BD8DE1256914F3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D65BE600BD4D8F3E5500699D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A2BF5C5049988172F080942F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7E5113686F26CD523309BF6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		282FB2A69FEDA3A22803C3BF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24EF8D18EFB374485A6554D6 /* AlbumListView.swift in Sources */,
+				6D484B1BC62DE1F064537910 /* AppleMusicMacService.swift in Sources */,
+				6DA2A483AF1F85DE17DC2882 /* AudioMetadataExtractor.swift in Sources */,
+				B09374F3E8FE9656061C73C4 /* AudioPlayerManager.swift in Sources */,
+				E9AB17F78E9E01A74F08C7A0 /* ContentView.swift in Sources */,
+				5ACD19C14EDC089B7B9D8399 /* FavoritesView.swift in Sources */,
+				FBF609F80D455EE2ACB99F19 /* LibraryView.swift in Sources */,
+				E48721AE0ABB07C5C86DFED0 /* LibraryViewModel.swift in Sources */,
+				6328C73EE1F80B955520E481 /* LocalFileService.swift in Sources */,
+				2137B19EB155BAC5F5C50301 /* LyricsParser.swift in Sources */,
+				751C8F03D64F8529A42A1ED0 /* LyricsView.swift in Sources */,
+				38253F0F45A1F876F2516CE7 /* MacLibraryView.swift in Sources */,
+				7B22F64F6218E7225A6515A6 /* MacPlayerBar.swift in Sources */,
+				B9D8FFED90DDCC09649281C0 /* MiniPlayerView.swift in Sources */,
+				FBFCD83A4513C8CF37FBE168 /* MusicLibraryService.swift in Sources */,
+				F4B81CEC76ADA17444346C2C /* NowPlayingView.swift in Sources */,
+				A56E24C067CF5F18BF9183A0 /* PlayerViewModel.swift in Sources */,
+				A78CD05E689E7B80D7AF60FC /* Playlist.swift in Sources */,
+				2701E7E24143EF9C78E42DE9 /* PlaylistView.swift in Sources */,
+				3CC075281ED2F6CE6653EB7D /* QingYinApp.swift in Sources */,
+				D045DA554A96918A9CD8E6F7 /* QingYinColors.swift in Sources */,
+				88A9B12FC8FC7AE1993DF5DC /* QueueView.swift in Sources */,
+				A4C823018ECC5193044EA739 /* SearchView.swift in Sources */,
+				EB0E20367FA01552CE6C5A2A /* SettingsView.swift in Sources */,
+				C895B3C805FD2FF7B2C23F8B /* Song.swift in Sources */,
+				48F9339FECE68EAABFF79F78 /* iCloudSyncService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		65FD8333EE37A6205719020A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20C5C247ACF84CF5CD702954 /* AlbumListView.swift in Sources */,
+				D2FCD2836C091F5C053CD605 /* AppleMusicMacService.swift in Sources */,
+				C630AB221252E0653C1F99B5 /* AudioMetadataExtractor.swift in Sources */,
+				2E061AFFA684C91839E6DA15 /* AudioPlayerManager.swift in Sources */,
+				A4726E66E7D0D5D2721886DB /* ContentView.swift in Sources */,
+				AABA94074C74F7AD02180466 /* FavoritesView.swift in Sources */,
+				2DEBDD8EA55485C601BEA749 /* LibraryView.swift in Sources */,
+				C7B63735562C5DA955B36259 /* LibraryViewModel.swift in Sources */,
+				14F279A74F5064A31F22C355 /* LocalFileService.swift in Sources */,
+				E26C0D08386D1981217F8A71 /* LyricsParser.swift in Sources */,
+				5476072A4CDAD98BCD5DE86B /* LyricsView.swift in Sources */,
+				48BC33EF9778F26682917EC0 /* MacLibraryView.swift in Sources */,
+				B6E6F6E71B464D860108FF74 /* MacPlayerBar.swift in Sources */,
+				C7DFF092A8139F19D87A2D05 /* MiniPlayerView.swift in Sources */,
+				DC97265C43F1740BA2D9984D /* MusicLibraryService.swift in Sources */,
+				31644B14DBCD92175E82D415 /* NowPlayingView.swift in Sources */,
+				F4A3993326AD6C88DDFF5FB6 /* PlayerViewModel.swift in Sources */,
+				B7A2A63D20F2A64D72CA8334 /* Playlist.swift in Sources */,
+				434E3C5E73A6BB17E8F8AF45 /* PlaylistView.swift in Sources */,
+				278B0431E95C6641BEEB5AAB /* QingYinApp.swift in Sources */,
+				9217EEE17C9D5FB1F3088B05 /* QingYinColors.swift in Sources */,
+				4C981E3884455AACCFEA8FD8 /* QueueView.swift in Sources */,
+				5FE1157F2E2E3ACF2A13B5E3 /* SearchView.swift in Sources */,
+				F2DC4CD5CAD6E93F18911B7F /* SettingsView.swift in Sources */,
+				914C68C88B074F773EA9B07C /* Song.swift in Sources */,
+				F0847AB727A041D61C9B1E9B /* iCloudSyncService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		08591DFFE0F09E133332B926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9BFT4GFW72;
+				INFOPLIST_FILE = QingYin/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qingyin.app.ios;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		11DE067CE6AC63E2FAFDF18A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readonly;
+				ENABLE_FILE_ACCESS_MUSIC_FOLDER = readonly;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = NO;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				INFOPLIST_FILE = QingYin/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qingyin.app.macos;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		34023237DA264E3785A0B33E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		757C77472BC1DF15247824B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		9A8EA07068267BE56E43C43E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readonly;
+				ENABLE_FILE_ACCESS_MUSIC_FOLDER = readonly;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = NO;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				INFOPLIST_FILE = QingYin/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qingyin.app.macos;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		A97257454F60FA6DF1757D0F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9BFT4GFW72;
+				INFOPLIST_FILE = QingYin/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qingyin.app.ios;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		444E453A460B974AEA1C526A /* Build configuration list for PBXProject "QingYin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34023237DA264E3785A0B33E /* Debug */,
+				757C77472BC1DF15247824B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CD4AC0DC4418E540E6E46BA6 /* Build configuration list for PBXNativeTarget "QingYin_iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08591DFFE0F09E133332B926 /* Debug */,
+				A97257454F60FA6DF1757D0F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DF5955C0C21C2AA5814BB74C /* Build configuration list for PBXNativeTarget "QingYin_macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A8EA07068267BE56E43C43E /* Debug */,
+				11DE067CE6AC63E2FAFDF18A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F6386B3ACB3A82702B5998EE /* Project object */;
+}

@@ -1,0 +1,77 @@
+//
+//  PlayerViewModel.swift
+//  播放器视图模型
+//
+
+import Foundation
+import Combine
+
+@MainActor
+final class PlayerViewModel: ObservableObject {
+    @Published var isNowPlayingPresented: Bool = false
+    
+    // 从 AudioPlayerManager 转发的播放进度属性
+    @Published var currentTime: TimeInterval = 0
+    @Published var duration: TimeInterval = 0
+    @Published var progress: Double = 0
+    @Published var volume: Float = 1.0
+    @Published var isShuffleOn: Bool = false
+    @Published var repeatMode: RepeatMode = .off
+    
+    private var cancellables = Set<AnyCancellable>()
+    let player = AudioPlayerManager.shared
+    
+    init() {
+        // 监听播放状态变化
+        player.$currentSong
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] song in
+                // 恢复播放时不弹出 NowPlaying
+                guard song != nil, !(self?.player.isRestoring ?? false) else { return }
+                self?.isNowPlayingPresented = true
+            }
+            .store(in: &cancellables)
+        
+        // 转发播放进度相关属性
+        player.$currentTime
+            .assign(to: &$currentTime)
+        player.$duration
+            .assign(to: &$duration)
+        player.$progress
+            .assign(to: &$progress)
+        player.$volume
+            .assign(to: &$volume)
+        player.$isShuffleOn
+            .assign(to: &$isShuffleOn)
+        player.$repeatMode
+            .assign(to: &$repeatMode)
+    }
+    
+    var currentSong: Song? {
+        player.currentSong
+    }
+    
+    var isPlaying: Bool {
+        player.playbackState == .playing
+    }
+    
+    func play(song: Song, queue: [Song] = []) {
+        player.play(song: song, queue: queue)
+    }
+    
+    func togglePlayPause() {
+        player.togglePlayPause()
+    }
+    
+    func next() {
+        player.nextTrack()
+    }
+    
+    func previous() {
+        player.previousTrack()
+    }
+    
+    func seek(to progress: Double) {
+        player.seek(to: progress)
+    }
+}

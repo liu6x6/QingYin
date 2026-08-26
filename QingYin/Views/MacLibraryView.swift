@@ -10,13 +10,10 @@ import UniformTypeIdentifiers
 import AppKit
 
 struct MacLibraryView: View {
-    @EnvironmentObject var playerViewModel: PlayerViewModel
     @EnvironmentObject var libraryViewModel: LibraryViewModel
     @State private var showingFileImporter = false
     @State private var selectedSongIDs: Set<UUID> = []
     @State private var showingAddToPlaylist = false
-    @State private var songsToAddToPlaylist: [Song] = []
-    @State private var clearsSelectionAfterAdding = false
     @State private var isDropTargeted = false
     
     // 列顺序
@@ -152,7 +149,7 @@ struct MacLibraryView: View {
                     let newSongs = libraryViewModel.importAudioFiles(from: urls)
                     // 单文件导入时自动播放
                     if newSongs.count == 1, let song = newSongs.first {
-                        playerViewModel.play(song: song, queue: libraryViewModel.filteredSongs)
+                        AudioPlayerManager.shared.play(song: song, queue: libraryViewModel.filteredSongs)
                     }
                 case .failure(let error):
                     print("导入失败: \(error.localizedDescription)")
@@ -238,17 +235,17 @@ struct MacLibraryView: View {
                 let newSongs = libraryViewModel.importAudioFiles(from: urls)
                 print("✅ 导入了 \(newSongs.count) 首新歌曲")
                 if newSongs.count == 1, let song = newSongs.first {
-                    playerViewModel.play(song: song, queue: libraryViewModel.filteredSongs)
+                    AudioPlayerManager.shared.play(song: song, queue: libraryViewModel.filteredSongs)
                 }
             }
             return true
         }
         .sheet(isPresented: $showingAddToPlaylist) {
-            AddToPlaylistSheet(songs: songsToAddToPlaylist) { playlist in
-                libraryViewModel.addSongsToPlaylist(songsToAddToPlaylist, playlist: playlist)
-                if clearsSelectionAfterAdding {
-                    selectedSongIDs.removeAll()
+            AddToPlaylistSheet(songs: selectedSongs) { playlist in
+                for song in selectedSongs {
+                    libraryViewModel.addSongsToPlaylist([song], playlist: playlist)
                 }
+                selectedSongIDs.removeAll()
             }
         }
     }
@@ -448,12 +445,7 @@ struct MacLibraryView: View {
                             handleSelection(song: song, modifierFlags: modifierFlags)
                         },
                         onPlay: {
-                            playerViewModel.play(song: song, queue: libraryViewModel.filteredSongs)
-                        },
-                        onAddToPlaylist: {
-                            songsToAddToPlaylist = [song]
-                            clearsSelectionAfterAdding = false
-                            showingAddToPlaylist = true
+                            AudioPlayerManager.shared.play(song: song, queue: libraryViewModel.filteredSongs)
                         }
                     )
                 }
@@ -494,7 +486,7 @@ struct MacLibraryView: View {
                         .font(.system(size: 12))
                         .foregroundColor(QingYinColors.cobalt)
                     
-                    Button(action: { playerViewModel.play(song: selectedSongs.first!, queue: selectedSongs) }) {
+                    Button(action: { AudioPlayerManager.shared.play(song: selectedSongs.first!, queue: selectedSongs) }) {
                         Label("播放", systemImage: "play.fill")
                             .font(.system(size: 11))
                     }
@@ -606,18 +598,16 @@ struct MacSongRow: View {
     let columnOrder: [MacLibraryView.Column]
     let onSelect: (NSEvent.ModifierFlags) -> Void
     let onPlay: () -> Void
-    let onAddToPlaylist: () -> Void
     
-    @EnvironmentObject var playerViewModel: PlayerViewModel
     @EnvironmentObject var libraryViewModel: LibraryViewModel
-    @State private var isHovered = false
+    @ObservedObject private var playbackState = PlaybackIndicatorState.shared
     
     var isCurrentSong: Bool {
-        playerViewModel.currentSong?.id == song.id
+        playbackState.currentSongID == song.id
     }
     
     var isPlaying: Bool {
-        isCurrentSong && playerViewModel.isPlaying
+        isCurrentSong && playbackState.isPlaying
     }
     
     var isFavorite: Bool {
@@ -643,9 +633,6 @@ struct MacSongRow: View {
         .onTapGesture {
             let flags = NSEvent.modifierFlags
             onSelect(flags)
-        }
-        .onHover { hovering in
-            isHovered = hovering
         }
         .contextMenu {
             contextMenu
@@ -689,8 +676,8 @@ struct MacSongRow: View {
         ZStack {
             if isPlaying {
                 HStack(spacing: 2) {
-                    ForEach(0..<4) { i in
-                        EQBar(index: i)
+                    ForEach(0..<4) { index in
+                        EQBar(index: index)
                             .frame(width: 2)
                     }
                 }
@@ -732,19 +719,9 @@ struct MacSongRow: View {
     
     @ViewBuilder
     private var durationCell: some View {
-        if isHovered && !isCurrentSong {
-            Button(action: onPlay) {
-                Image(systemName: "play.fill")
-                    .font(.system(size: 11))
-                    .foregroundColor(QingYinColors.cobalt)
-                    .frame(width: 20, height: 20)
-            }
-            .buttonStyle(.plain)
-        } else {
-            Text(song.formattedDuration)
-                .font(.system(size: 12))
-                .foregroundColor(QingYinColors.inkMist)
-        }
+        Text(song.formattedDuration)
+            .font(.system(size: 12))
+            .foregroundColor(QingYinColors.inkMist)
     }
     
     private var favoriteCell: some View {
@@ -766,7 +743,17 @@ struct MacSongRow: View {
             Label("下一首播放", systemImage: "text.insert")
         }
 
-        Button(action: onAddToPlaylist) {
+        Menu {
+            if libraryViewModel.playlists.isEmpty {
+                Text("请先新建播放列表")
+            } else {
+                ForEach(libraryViewModel.playlists) { playlist in
+                    Button(playlist.name) {
+                        libraryViewModel.addSongsToPlaylist([song], playlist: playlist)
+                    }
+                }
+            }
+        } label: {
             Label("添加到播放列表", systemImage: "text.badge.plus")
         }
         
@@ -798,9 +785,6 @@ struct MacSongRow: View {
     private var backgroundColor: Color {
         if isSelected || isCurrentSong {
             return QingYinColors.cobaltGhost
-        }
-        if isHovered {
-            return QingYinColors.porcelainWarm.opacity(0.8)
         }
         return QingYinColors.porcelain
     }

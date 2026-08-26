@@ -98,3 +98,26 @@ final class PlayerViewModel: ObservableObject {
         player.resetEqualizer()
     }
 }
+
+/// 为列表行提供播放状态，避免播放进度刷新重建整行。
+@MainActor
+final class PlaybackIndicatorState: ObservableObject {
+    static let shared = PlaybackIndicatorState()
+
+    @Published private(set) var currentSongID: UUID?
+    @Published private(set) var isPlaying = false
+
+    private var cancellables = Set<AnyCancellable>()
+
+    private init() {
+        let player = AudioPlayerManager.shared
+        player.$currentSong
+            .map { $0?.id }
+            .sink { [weak self] in self?.currentSongID = $0 }
+            .store(in: &cancellables)
+        player.$playbackState
+            .map { $0 == .playing }
+            .sink { [weak self] in self?.isPlaying = $0 }
+            .store(in: &cancellables)
+    }
+}

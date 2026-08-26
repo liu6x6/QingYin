@@ -6,7 +6,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var playerViewModel: PlayerViewModel
     @EnvironmentObject var libraryViewModel: LibraryViewModel
     
     var body: some View {

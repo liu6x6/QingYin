@@ -65,11 +65,6 @@ struct LibraryView: View {
                 .padding(.vertical, 12)
                 .background(QingYinColors.porcelainWarm)
                 
-                // 迷你播放器
-                MiniPlayerView()
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 8)
-                
                 switch libraryViewModel.selectedFilter {
                 case .songs:
                     List {
@@ -90,9 +85,6 @@ struct LibraryView: View {
                     ArtistListView(showsTitle: false)
                 }
             }
-        }
-        .sheet(isPresented: $playerViewModel.isNowPlayingPresented) {
-            NowPlayingView()
         }
         .fileImporter(
             isPresented: $showingFileImporter,

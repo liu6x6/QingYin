@@ -18,6 +18,7 @@
 9. [侧栏点击区域修复](#9-侧栏点击区域修复)
 10. [启动恢复上次播放](#10-启动恢复上次播放)
 11. [播放位置持续保存](#11-播放位置持续保存)
+12. [2026-08-26：本地音乐体验完善](#12-2026-08-26本地音乐体验完善)
 
 ---
 
@@ -439,3 +440,35 @@ private func saveCurrentTime() {
 
 ### 文件
 - `Services/AudioPlayerManager.swift` — saveCurrentTime, init 监听
+
+---
+
+## 12. 2026-08-26：本地音乐体验完善
+
+### 均衡器与本地播放
+- 新增十段均衡器模型、预设、预放大、持久化与青花瓷风格界面。
+- 本地播放迁移至 `AVAudioEngine + AVAudioPlayerNode + AVAudioUnitEQ`，支持实时调音。
+- iOS、iPadOS 与 macOS 均可从设置进入；Mac 另提供侧边栏和播放条快捷入口。
+
+### 专辑、艺术家与播放列表
+- 专辑和艺术家均改为自适应主从布局：Mac/iPad 同屏浏览，iPhone 自动折叠为导航层级。
+- 专辑/艺术家详情支持播放全部、随机播放、曲目选择和播放控制。
+- “我的列表”由 mock 网格升级为真实播放列表管理：创建、重命名、删除、添加/移除歌曲、播放和随机播放均持久化并同步。
+- 歌曲支持通过 macOS 右键菜单或 iOS 长按菜单添加到指定播放列表；Mac 多选歌曲仍支持批量添加。
+
+### Apple Music 本地文件
+- macOS 扫描结果自动创建或更新“Apple Music”播放列表。
+- 已扫描歌曲索引写入本地缓存，启动时恢复，不再每次扫描磁盘。
+- 将 macOS 的本地文件访问与 iOS 的 MediaPlayer 权限分离，避免本地播放触发 Apple Music 授权。
+
+### macOS 交互稳定性
+- 修复播放列表二级菜单在播放期间闪烁的问题。
+- 播放进度仅由底部播放条直接观察；资料库不再接收每 0.25 秒的进度更新。
+- 保留歌曲行的 EQ 播放动画，同时让右键菜单不受其影响。
+
+### 文件
+- `Models/EqualizerSettings.swift`, `Services/AudioPlayerManager.swift`
+- `Views/EqualizerView.swift`, `Views/AlbumListView.swift`, `Views/PlaylistView.swift`
+- `Services/AppleMusicMacService.swift`, `Services/MusicLibraryService.swift`
+- `ViewModels/LibraryViewModel.swift`, `ViewModels/PlayerViewModel.swift`
+- `Views/MacLibraryView.swift`, `Views/MacPlayerBar.swift`

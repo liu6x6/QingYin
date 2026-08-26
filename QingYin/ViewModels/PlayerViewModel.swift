@@ -33,13 +33,16 @@ final class PlayerViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
-        // 转发播放进度相关属性
+        // iOS 播放界面使用视图模型转发的进度。macOS 由底部播放条直接观察音频引擎，
+        // 避免高频进度更新重建资料库中的 AppKit 上下文菜单。
+        #if !os(macOS)
         player.$currentTime
             .assign(to: &$currentTime)
         player.$duration
             .assign(to: &$duration)
         player.$progress
             .assign(to: &$progress)
+        #endif
         player.$volume
             .assign(to: &$volume)
         player.$isShuffleOn

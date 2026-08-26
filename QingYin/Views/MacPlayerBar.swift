@@ -6,14 +6,14 @@
 import SwiftUI
 
 struct MacPlayerBar: View {
-    @EnvironmentObject var playerViewModel: PlayerViewModel
+    @ObservedObject private var audioPlayer = AudioPlayerManager.shared
     
     var body: some View {
         HStack(spacing: 16) {
             // 左侧：当前歌曲信息
             HStack(spacing: 10) {
                 ZStack {
-                    if let artwork = playerViewModel.currentSong?.artwork {
+                    if let artwork = audioPlayer.currentSong?.artwork {
                         artwork
                             .resizable()
                             .scaledToFill()
@@ -29,7 +29,7 @@ struct MacPlayerBar: View {
                         .stroke(QingYinColors.cobalt.opacity(0.1), lineWidth: 1)
                         .frame(width: 40, height: 40)
                     
-                    if playerViewModel.currentSong?.artwork == nil {
+                    if audioPlayer.currentSong?.artwork == nil {
                         Image(systemName: "music.note")
                             .font(.system(size: 14))
                             .foregroundColor(QingYinColors.cobalt.opacity(0.4))
@@ -37,12 +37,12 @@ struct MacPlayerBar: View {
                 }
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(playerViewModel.currentSong?.title ?? "未在播放")
+                    Text(audioPlayer.currentSong?.title ?? "未在播放")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundColor(QingYinColors.ink)
                         .lineLimit(1)
                     
-                    Text(playerViewModel.currentSong?.artist ?? "选择一首歌开始播放")
+                    Text(audioPlayer.currentSong?.artist ?? "选择一首歌开始播放")
                         .font(.system(size: 11))
                         .foregroundColor(QingYinColors.inkMist)
                         .lineLimit(1)
@@ -53,35 +53,35 @@ struct MacPlayerBar: View {
             // 中间：控制 + 进度
             VStack(spacing: 4) {
                 HStack(spacing: 16) {
-                    Button(action: { playerViewModel.player.toggleShuffle() }) {
+                    Button(action: { audioPlayer.toggleShuffle() }) {
                         Image(systemName: "shuffle")
                             .font(.system(size: 11))
-                            .foregroundColor(playerViewModel.isShuffleOn ? QingYinColors.cobalt : QingYinColors.inkMist)
+                            .foregroundColor(audioPlayer.isShuffleOn ? QingYinColors.cobalt : QingYinColors.inkMist)
                     }
                     .buttonStyle(.plain)
                     
-                    Button(action: playerViewModel.previous) {
+                    Button(action: audioPlayer.previousTrack) {
                         Image(systemName: "backward.fill")
                             .font(.system(size: 13))
                             .foregroundColor(QingYinColors.ink)
                     }
                     .buttonStyle(.plain)
                     
-                    Button(action: playerViewModel.togglePlayPause) {
-                        Image(systemName: playerViewModel.isPlaying ? "pause.fill" : "play.fill")
+                    Button(action: audioPlayer.togglePlayPause) {
+                        Image(systemName: audioPlayer.playbackState == .playing ? "pause.fill" : "play.fill")
                             .font(.system(size: 16))
                             .foregroundColor(QingYinColors.cobalt)
                     }
                     .buttonStyle(.plain)
                     
-                    Button(action: playerViewModel.next) {
+                    Button(action: audioPlayer.nextTrack) {
                         Image(systemName: "forward.fill")
                             .font(.system(size: 13))
                             .foregroundColor(QingYinColors.ink)
                     }
                     .buttonStyle(.plain)
                     
-                    Button(action: { playerViewModel.player.cycleRepeatMode() }) {
+                    Button(action: { audioPlayer.cycleRepeatMode() }) {
                         Image(systemName: repeatImageName)
                             .font(.system(size: 11))
                             .foregroundColor(repeatColor)
@@ -90,18 +90,18 @@ struct MacPlayerBar: View {
                 }
                 
                 HStack(spacing: 8) {
-                    Text(formatTime(playerViewModel.currentTime))
+                    Text(formatTime(audioPlayer.currentTime))
                         .font(.system(size: 9))
                         .foregroundColor(QingYinColors.inkMist)
                         .monospacedDigit()
                         .frame(width: 36, alignment: .leading)
                     
                     ProgressSlider(
-                        progress: playerViewModel.progress,
-                        onSeek: { playerViewModel.seek(to: $0) }
+                        progress: audioPlayer.progress,
+                        onSeek: { audioPlayer.seek(to: $0) }
                     )
                     
-                    Text(formatTime(playerViewModel.duration))
+                    Text(formatTime(audioPlayer.duration))
                         .font(.system(size: 9))
                         .foregroundColor(QingYinColors.inkMist)
                         .monospacedDigit()
@@ -115,7 +115,7 @@ struct MacPlayerBar: View {
                 Button(action: { showEqualizer = true }) {
                     Image(systemName: "slider.vertical.3")
                         .font(.system(size: 12))
-                        .foregroundColor(playerViewModel.equalizerSettings.isEnabled ? QingYinColors.cobalt : QingYinColors.inkMist)
+                        .foregroundColor(audioPlayer.equalizerSettings.isEnabled ? QingYinColors.cobalt : QingYinColors.inkMist)
                 }
                 .buttonStyle(.plain)
                 .help("均衡器")
@@ -125,11 +125,10 @@ struct MacPlayerBar: View {
                     .foregroundColor(QingYinColors.inkMist)
                 
                 ProgressSlider(
-                    progress: Double(playerViewModel.volume),
+                    progress: Double(audioPlayer.volume),
                     onSeek: {
                         let v = Float($0)
-                        playerViewModel.volume = v
-                        playerViewModel.player.volume = v
+                        audioPlayer.volume = v
                     }
                 )
             }
@@ -152,7 +151,7 @@ struct MacPlayerBar: View {
     @State private var showEqualizer = false
     
     private var repeatImageName: String {
-        switch playerViewModel.repeatMode {
+        switch audioPlayer.repeatMode {
         case .off: return "arrow.triangle.2.circlepath"
         case .all: return "repeat"
         case .one: return "repeat.1"
@@ -160,7 +159,7 @@ struct MacPlayerBar: View {
     }
     
     private var repeatColor: Color {
-        playerViewModel.repeatMode == .off ? QingYinColors.inkMist : QingYinColors.cobalt
+        audioPlayer.repeatMode == .off ? QingYinColors.inkMist : QingYinColors.cobalt
     }
     
     private func formatTime(_ time: TimeInterval) -> String {

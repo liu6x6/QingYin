@@ -56,7 +56,7 @@ targets:
           - Info*.plist
     settings:
       base:
-        INFOPLIST_FILE: QingYin/Info.plist
+        INFOPLIST_FILE: QingYin/Info-macOS.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.qingyin.app.macos
         MARKETING_VERSION: "1.0.0"
         CURRENT_PROJECT_VERSION: "1"
@@ -74,7 +74,6 @@ targets:
         CFBundleDisplayName: 清音
         CFBundleShortVersionString: "1.0.0"
         CFBundleVersion: "1"
-        NSAppleMusicUsageDescription: 清音需要访问您的音乐库以播放本地音乐。
     dependencies:
       - sdk: SwiftUI.framework
       - sdk: AVFoundation.framework

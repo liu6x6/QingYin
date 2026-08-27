@@ -38,7 +38,6 @@ struct MiniPlayerView: View {
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(QingYinColors.cobalt)
                             .frame(width: 36, height: 36)
-                            .background(QingYinColors.cobalt.opacity(0.10), in: Circle())
                     }
                     .buttonStyle(.plain)
 
@@ -52,30 +51,10 @@ struct MiniPlayerView: View {
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
-                .background {
-                    glassBackground
-                }
-                .overlay(
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .strokeBorder(Color.white.opacity(0.55), lineWidth: 1)
-                )
-                .shadow(color: QingYinColors.ink.opacity(0.10), radius: 14, y: 5)
                 .onTapGesture {
                     playerViewModel.isNowPlayingPresented = true
                 }
             }
-        }
-    }
-
-    @ViewBuilder
-    private var glassBackground: some View {
-        if #available(iOS 26.0, *) {
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(Color.clear)
-                .glassEffect()
-        } else {
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(.ultraThinMaterial)
         }
     }
 

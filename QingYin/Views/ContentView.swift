@@ -23,106 +23,48 @@ struct ContentView: View {
 struct iOSContentView: View {
     @EnvironmentObject var playerViewModel: PlayerViewModel
     @State private var selectedTab = 0
-    private let tabBarHeight: CGFloat = 60
 
     var body: some View {
-        GeometryReader { proxy in
-            ZStack(alignment: .bottom) {
-                TabView(selection: $selectedTab) {
-                    LibraryView()
-                        .tag(0)
-
-                    SearchView()
-                        .tag(1)
-
-                    PlaylistView()
-                        .tag(2)
-
-                    SettingsView()
-                        .tag(3)
+        TabView(selection: $selectedTab) {
+            LibraryView()
+                .tabItem {
+                    Label("音乐库", systemImage: "music.note.list")
                 }
-                .toolbar(.hidden, for: .tabBar)
-                .safeAreaInset(edge: .bottom, spacing: 0) {
-                    Color.clear.frame(
-                        height: playerViewModel.currentSong == nil
-                            ? tabBarHeight + 24
-                            : tabBarHeight + 96
-                    )
-                }
+                .tag(0)
 
+            SearchView()
+                .tabItem {
+                    Label("搜索", systemImage: "magnifyingglass")
+                }
+                .tag(1)
+
+            PlaylistView()
+                .tabItem {
+                    Label("播放列表", systemImage: "list.bullet")
+                }
+                .tag(2)
+
+            SettingsView()
+                .tabItem {
+                    Label("设置", systemImage: "gearshape")
+                }
+                .tag(3)
+        }
+        .overlay(alignment: .bottom) {
+            GeometryReader { proxy in
                 if playerViewModel.currentSong != nil {
                     MiniPlayerView()
-                        .padding(.horizontal, 12)
-                        .padding(.bottom, proxy.safeAreaInsets.bottom + tabBarHeight + 20)
+                        .frame(maxWidth: .infinity)
+                        .background(.bar)
+                        .overlay(alignment: .top) {
+                            Divider()
+                        }
+                        .padding(.bottom, proxy.safeAreaInsets.bottom + 49)
                 }
-
-                iOSGlassTabBar(selectedTab: $selectedTab)
-                    .padding(.horizontal, 12)
-                    .padding(.bottom, proxy.safeAreaInsets.bottom + 8)
             }
         }
         .sheet(isPresented: $playerViewModel.isNowPlayingPresented) {
             NowPlayingView()
-        }
-    }
-}
-
-private struct iOSGlassTabBar: View {
-    @Binding var selectedTab: Int
-
-    private let tabs = [
-        (id: 0, title: "音乐库", icon: "music.note.list"),
-        (id: 1, title: "搜索", icon: "magnifyingglass"),
-        (id: 2, title: "播放列表", icon: "list.bullet"),
-        (id: 3, title: "设置", icon: "gearshape")
-    ]
-
-    var body: some View {
-        HStack(spacing: 2) {
-            ForEach(tabs, id: \.id) { tab in
-                Button {
-                    selectedTab = tab.id
-                } label: {
-                    VStack(spacing: 3) {
-                        Image(systemName: tab.icon)
-                            .font(.system(size: 16, weight: .medium))
-                        Text(tab.title)
-                            .font(.system(size: 10, weight: .medium))
-                    }
-                    .foregroundStyle(
-                        selectedTab == tab.id
-                            ? QingYinColors.cobalt
-                            : QingYinColors.inkLight
-                    )
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 52)
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(tab.title)
-                .accessibilityAddTraits(selectedTab == tab.id ? .isSelected : [])
-            }
-        }
-        .padding(.horizontal, 6)
-        .background {
-            glassCapsule
-        }
-        .overlay {
-            Capsule()
-                .strokeBorder(Color.white.opacity(0.55), lineWidth: 1)
-        }
-        .shadow(color: QingYinColors.ink.opacity(0.10), radius: 14, y: 5)
-    }
-
-    @ViewBuilder
-    private var glassCapsule: some View {
-        if #available(iOS 26.0, *) {
-            Capsule()
-                .fill(Color.clear)
-                .glassEffect()
-        } else {
-            Capsule()
-                .fill(.ultraThinMaterial)
         }
     }
 }

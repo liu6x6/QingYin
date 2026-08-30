@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
+  <title>清音：青花声波</title>
+  <rect width="1024" height="1024" fill="#F8F4EC"/>
+  <path d="M0 676c108-112 207-118 306-11 108 116 215 116 322 0 104-112 201-108 396 15v334H0Z" fill="#D8EBE6"/>
+  <path d="M0 736c101-97 205-99 311 1 111 105 219 104 325-3 99-99 205-102 388-1" fill="none" stroke="#6A9E96" stroke-width="22"/>
+  <path d="M0 804c116-91 223-89 321 3 100 93 205 94 315 2 111-94 238-96 388 3" fill="none" stroke="#2A6CB8" stroke-width="16"/>
+  <circle cx="512" cy="425" r="281" fill="#1A4B8C"/>
+  <circle cx="512" cy="425" r="229" fill="none" stroke="#D6E4F2" stroke-width="13" opacity=".72"/>
+  <path d="M512 207c44 52 77 103 88 156 13 60-17 106-88 155-71-49-101-95-88-155 11-53 44-104 88-156Z" fill="#F8F4EC"/>
+  <path d="M512 298v205M512 390c-43-38-86-51-132-40 11 53 45 88 102 104M512 390c43-38 86-51 132-40-11 53-45 88-102 104" fill="none" stroke="#1A4B8C" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="none" stroke="#1A4B8C" stroke-width="20" stroke-linecap="round">
+    <path d="M252 185c-27 27-48 59-62 95M772 185c27 27 48 59 62 95"/>
+    <path d="M165 356c-8 34-10 68-5 103M859 356c8 34 10 68 5 103"/>
+  </g>
+</svg>

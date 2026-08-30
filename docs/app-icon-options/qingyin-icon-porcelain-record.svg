@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
+  <title>清音：青花唱片</title>
+  <rect width="1024" height="1024" fill="#F8F4EC"/>
+  <rect x="52" y="52" width="920" height="920" rx="208" fill="#F2ECE0" stroke="#1A4B8C" stroke-width="18"/>
+  <path d="M174 330c44-77 105-136 182-177M850 330c-44-77-105-136-182-177M174 694c44 77 105 136 182 177M850 694c-44 77-105 136-182 177" fill="none" stroke="#6A9E96" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="512" cy="512" r="284" fill="#1A4B8C"/>
+  <circle cx="512" cy="512" r="226" fill="none" stroke="#D6E4F2" stroke-width="15" opacity=".72"/>
+  <circle cx="512" cy="512" r="180" fill="none" stroke="#D6E4F2" stroke-width="10" opacity=".46"/>
+  <circle cx="512" cy="512" r="126" fill="#F8F4EC" stroke="#6A9E96" stroke-width="15"/>
+  <circle cx="512" cy="512" r="32" fill="#1A4B8C"/>
+  <path d="M401 467v164c0 38 31 58 66 47 25-8 39-30 39-54V449l156-39v150c0 38 31 58 66 47 25-8 39-30 39-54V332l-261 65v182c-18-15-43-20-67-12-25 8-38 31-38 55 0 25 14 46 35 52" fill="#F8F4EC"/>
+  <path d="M222 512h95M707 512h95M512 222v95M512 707v95" stroke="#6A9E96" stroke-width="16" stroke-linecap="round"/>
+</svg>

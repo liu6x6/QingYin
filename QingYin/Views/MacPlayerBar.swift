@@ -7,6 +7,8 @@ import SwiftUI
 
 struct MacPlayerBar: View {
     @ObservedObject private var audioPlayer = AudioPlayerManager.shared
+    var onArtworkTap: (() -> Void)? = nil
+    @State private var isArtworkHovered = false
     
     var body: some View {
         HStack(spacing: 16) {
@@ -34,6 +36,28 @@ struct MacPlayerBar: View {
                             .font(.system(size: 14))
                             .foregroundColor(QingYinColors.cobalt.opacity(0.4))
                     }
+                    
+                    // 歌词按钮 hover 覆盖层
+                    if audioPlayer.currentSong != nil {
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(QingYinColors.cobalt.opacity(isArtworkHovered ? 0.5 : 0))
+                            .frame(width: 40, height: 40)
+                            .overlay(
+                                Image(systemName: "quote.bubble.fill")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(.white)
+                                    .opacity(isArtworkHovered ? 1 : 0)
+                            )
+                    }
+                }
+                .contentShape(Rectangle())
+                .onHover { hovering in
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        isArtworkHovered = hovering
+                    }
+                }
+                .onTapGesture {
+                    onArtworkTap?()
                 }
                 
                 VStack(alignment: .leading, spacing: 2) {

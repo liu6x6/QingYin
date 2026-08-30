@@ -19,6 +19,13 @@
 10. [启动恢复上次播放](#10-启动恢复上次播放)
 11. [播放位置持续保存](#11-播放位置持续保存)
 12. [2026-08-26：本地音乐体验完善](#12-2026-08-26本地音乐体验完善)
+13. [表头列拖拽把手修复](#13-表头列拖拽把手修复)
+14. [播放位置保存修复 — 防止 0s 覆盖](#14-播放位置保存修复--防止-0s-覆盖)
+15. [全屏歌词面板](#15-全屏歌词面板)
+16. [歌词自动搜索下载](#16-歌词自动搜索下载)
+17. [歌词同步与点击跳转](#17-歌词同步与点击跳转)
+18. [APP 图标 SVG 设计](#18-app-图标-svg-设计)
+19. [设计令牌文档](#19-设计令牌文档)
 
 ---
 
@@ -472,3 +479,367 @@ private func saveCurrentTime() {
 - `Services/AppleMusicMacService.swift`, `Services/MusicLibraryService.swift`
 - `ViewModels/LibraryViewModel.swift`, `ViewModels/PlayerViewModel.swift`
 - `Views/MacLibraryView.swift`, `Views/MacPlayerBar.swift`
+
+---
+
+## 13. 表头列拖拽把手修复
+
+### 问题
+MacLibraryView 的表头中，“标题”和“艺术家”列之间的分隔线无法拖拽调整宽度，但其他列可以。
+
+### 根因分析
+
+**问题 1：标题列拖拽把手被隐藏**
+```swift
+// 错误代码：!column.isFlexible 条件排除了弹性列
+if column.isResizable && !column.isFlexible {
+    // 拖拽把手代码
+}
+```
+由于“标题”列被设为弹性列（`isFlexible = true`），条件判断为 false，不渲染把手。
+
+**问题 2：分隔线视觉 bug**
+```swift
+// 错误代码：两个 .frame 修饰符，后者覆盖前者
+Rectangle()
+    .frame(width: 1)   // 1pt 宽
+    .frame(width: 8)   // 被覆盖为 8pt 宽矩形
+```
+
+**问题 3：手势冲突**
+`.gesture` 被 `.onTapGesture`（排序点击）和外层 `.gesture`（列拖拽排序）抢占，导致拖拽不响应。
+
+### 解决
+
+**修复 1：移除弹性列排除条件**
+```swift
+if column.isResizable {  // 所有可调整列都有把手
+    resizeHandle(for: column)
+}
+```
+
+**修复 2：ZStack 分离可见层和触摸层**
+```swift
+ZStack {
+    Rectangle()
+        .fill(QingYinColors.cobalt.opacity(0.15))
+        .frame(width: 1)  // 1pt 可见分隔线
+    
+    Rectangle()
+        .fill(Color.clear)
+        .frame(width: 10)  // 10pt 透明触摸区，更容易点击
+}
+```
+
+**修复 3：highPriorityGesture 提高优先级**
+```swift
+.highPriorityGesture(
+    DragGesture(minimumDistance: 1)
+        .onChanged { value in ... }
+)
+```
+
+**弹性列宽度保持**：`effectiveColumnWidths` 中弹性列取 `max(用户拖拽宽度, 剩余空间)`，用户拉宽后不会被强制缩回。
+
+### 文件
+- `Views/MacLibraryView.swift` — headerCell, resizeHandle, effectiveColumnWidths
+
+---
+
+## 14. 播放位置保存修复 — 防止 0s 覆盖
+
+### 问题
+关闭 APP 后重新打开，播放位置从 0 开始，而不是上次播放的位置（如 22s）。
+
+日志显示：
+```
+🔄 restoreLastPlayed: 那一年, savedTime=0s
+💾 saveCurrentTime: SKIPPED (保护期, time=0s)
+```
+
+### 根因分析
+
+**保存链路**：
+1. 播放中 → `updatePlaybackProgress()` 每 5 秒保存 ✅ 保存了 22s
+2. 歌曲播完 → `advanceToNext()` → `pause()` → `load()` 把 `currentTime` 重置为 0
+3. 关闭 APP → `willResignActiveNotification` 触发 → `saveCurrentTime()` 用 **0s 覆盖了 22s** ❌
+4. 重新打开 → 读到 0s
+
+### 解决 — 核心保护规则
+
+**永远不用 0s 覆盖已有的有效位置**：
+
+```swift
+private func saveCurrentTime() {
+    let time = currentTime
+    
+    // 恢复保护期内，不保存 0s
+    if Date() < saveProtectionUntil && time < 1 {
+        print("💾 saveCurrentTime: SKIPPED (保护期)")
+        return
+    }
+    
+    // 核心保护：永远不要用 0s 覆盖已有的有效位置
+    if time < 1 {
+        let saved = UserDefaults.standard.double(forKey: PersistenceKey.lastPlayedTime.rawValue)
+        if saved > 1 {
+            print("💾 saveCurrentTime: SKIPPED (0s 不覆盖已保存的 \(Int(saved))s)")
+            return
+        }
+    }
+    
+    UserDefaults.standard.set(time, forKey: PersistenceKey.lastPlayedTime.rawValue)
+    print("💾 saveCurrentTime: \(Int(time))s")
+}
+```
+
+**恢复保护期**：`restoreLastPlayed` 设置 3 秒保护期，防止恢复后立即保存 0s。
+
+### 文件
+- `Services/AudioPlayerManager.swift` — saveCurrentTime, restoreLastPlayed
+
+---
+
+## 15. 全屏歌词面板
+
+### 问题
+1. 歌词视图只从右侧滑入，宽度 720pt，左侧留 120pt 空白，不美观
+2. 歌词不同步 — macOS 上 `PlayerViewModel.currentTime` 被 `#if !os(macOS)` 跳过，收不到时间更新
+3. 点击歌词跳转已实现但需验证
+
+### 解决
+
+**问题 1：全屏覆盖**
+
+重写 `LyricsPanelView`，改为全屏覆盖整个 APP 窗口：
+
+```
+┌─ LyricsPanelView（全屏覆盖）───────────────────────────┐
+│                                                    [↓] │
+│                                                        │
+│  ┌─────────────┐   ┌──────────────────────────────┐   │
+│  │             │   │                              │   │
+│  │  封面 240px  │   │   歌词文本                    │   │
+│  │             │   │   ▶ 当前行（22pt 蓝色加粗）    │   │
+│  └─────────────┘   │   下一行（17pt）              │   │
+│                     │   再下一行...                 │   │
+│  歌曲名 / 艺术家     │                              │   │
+│  [进度条]           │   点击任意行 → 跳转播放位置    │   │
+│  ⤮ ◀ ⏸ ▶ 🔁      │                              │   │
+│  ♥          🔊━━━  │                              │   │
+└────────────────────────────────────────────────────────┘
+```
+
+**问题 2：歌词时间同步**
+
+**根因**：`PlayerViewModel.currentTime` 在 macOS 上被 `#if !os(macOS)` 跳过，不会更新。
+
+**修复**：`LyricsPanelView` 直接监听 `AudioPlayerManager.$currentTime`：
+```swift
+private let audioPlayer = AudioPlayerManager.shared
+
+.onReceive(audioPlayer.$currentTime) { time in
+    currentTime = time
+    updateCurrentLine(time: time)
+}
+```
+
+**问题 3：点击歌词跳转**
+
+已实现，点击歌词行会：
+1. **跳转到对应时间** — `audioPlayer.seek(to: line.time / duration)`
+2. **自动恢复播放** — 如果处于暂停状态，点击后自动 resume
+
+```swift
+.onTapGesture {
+    guard audioPlayer.duration > 0 else { return }
+    let progress = line.time / audioPlayer.duration
+    audioPlayer.seek(to: progress)
+    if audioPlayer.playbackState != .playing {
+        audioPlayer.resume()
+    }
+}
+```
+
+### 歌词视觉样式
+
+| 状态 | 字号 | 字重 | 颜色 |
+|------|------|------|------|
+| 当前行 | 22pt | `.bold` | cobalt（蓝色） |
+| 已播过 | 17pt | `.medium` | ink 35% opacity |
+| 临近行 | 17pt | `.medium` | 按距离递减（50% → 20%） |
+| 远处行 | 17pt | `.medium` | inkMist 20% opacity |
+
+### 文件
+- `Views/LyricsPanelView.swift` — 重写为全屏面板
+- `Views/ContentView.swift` — overlay 层全屏覆盖
+
+---
+
+## 16. 歌词自动搜索下载
+
+### 问题
+用户希望 APP 自动搜索并下载歌词，缓存到本地，避免每次重复下载。
+
+### 解决
+
+**数据流**：
+```
+歌曲切换
+  ↓
+PlayerViewModel.fetchLyrics()
+  ↓
+┌─ song.lyrics 有值？ → 直接使用（本地 .lrc 文件）
+└─ 没有 → LyricsService.getLyrics()
+          ↓
+         ① 内存缓存 → 命中则返回
+         ② 磁盘缓存 (Documents/Lyrics/{songID}.lrc) → 命中则返回
+         ③ LRCLIB API 搜索
+            → 精确匹配 (title + artist)
+            → 模糊搜索 (title)
+            → 模糊搜索 (title + artist)
+            → 命中则缓存到内存 + 磁盘
+            → 全部未找到 → 缓存空结果（避免重复搜索）
+  ↓
+@Published currentLyrics 更新
+  ↓
+LyricsPanelView / LyricsView 自动刷新
+```
+
+**API 来源**：
+- **地址**: `https://lrclib.net/api`
+- **类型**: 开源免费歌词 API
+- **特点**: 无需 API Key，直接返回 LRC 格式歌词，支持中文
+
+**搜索策略（三级降级）**：
+```swift
+// 1. 精确匹配（标题 + 艺术家）
+GET /api/get?artist_name=周杰伦&track_name=晴天
+
+// 2. 模糊搜索（仅标题）
+GET /api/search?q=晴天
+
+// 3. 模糊搜索（标题 + 艺术家）
+GET /api/search?q=晴天 周杰伦
+```
+
+**缓存机制（三级）**：
+```swift
+1. 内存缓存  → 最快，APP 运行期间
+2. 磁盘缓存  → Documents/Lyrics/{songID}.lrc
+3. 网络请求  → LRCLIB API
+```
+
+### 文件
+- `Services/LyricsService.swift` — 歌词搜索与缓存服务（新建）
+- `ViewModels/PlayerViewModel.swift` — 新增 `currentLyrics`, `isLyricsLoading`, `fetchLyrics()`
+- `Views/LyricsPanelView.swift` — 读取 `currentLyrics`，显示加载状态
+- `Views/LyricsView.swift` — 同步更新，读取 `currentLyrics`
+
+---
+
+## 17. 歌词同步与点击跳转
+
+### 问题
+1. 歌词没有随时间变化的效果（不同步）
+2. 用户希望通过滚动/点击歌词跳转到对应播放时间
+
+### 解决
+
+**歌词同步**：
+
+通过 `onReceive(audioPlayer.$currentTime)` 实时监听播放时间，更新 `currentLineIndex`：
+
+```swift
+.onReceive(audioPlayer.$currentTime) { time in
+    currentTime = time
+    updateCurrentLine(time: time)
+}
+
+private func updateCurrentLine(time: TimeInterval) {
+    let newIndex = parsedLyrics.currentIndex(at: time)
+    if newIndex != currentLineIndex {
+        currentLineIndex = newIndex
+    }
+}
+```
+
+**自动滚动**：
+
+使用 `ScrollViewReader` + `onChange`，当前行变化时自动滚动到中心：
+
+```swift
+.onChange(of: currentLineIndex) { newIndex in
+    guard let newIndex = newIndex else { return }
+    withAnimation(.easeInOut(duration: 0.6)) {
+        proxy.scrollTo(newIndex, anchor: .center)
+    }
+}
+```
+
+**点击跳转**：
+
+每行歌词添加 `onTapGesture`，点击后跳转并自动播放：
+
+```swift
+.onTapGesture {
+    guard audioPlayer.duration > 0 else { return }
+    let progress = line.time / audioPlayer.duration
+    audioPlayer.seek(to: progress)
+    if audioPlayer.playbackState != .playing {
+        audioPlayer.resume()
+    }
+}
+```
+
+### 文件
+- `Views/LyricsPanelView.swift` — updateCurrentLine, scrollTo, onTapGesture
+
+---
+
+## 18. APP 图标 SVG 设计
+
+### 任务
+生成 6 张 SVG 图标，融合音乐和青花瓷元素，使用原型中的色调。
+
+### 生成内容
+
+| 文件名 | 设计风格 | 说明 |
+|--------|---------|------|
+| `icon-1-porcelain-disc.svg` | 青花瓷唱片 | 钴蓝色唱片外环 + 中心青花莲花图案（8瓣 + 8瓣错位） |
+| `icon-2-cloud-note.svg` | 祥云音符 | 瓷白背景 + 四角祥云纹 + 中央大音符 |
+| `icon-3-brush-circle.svg` | 水墨圆圈 | 毛笔画圆（笔触粗细变化）+ 圆内钴蓝十六分音符 + 红色印章 |
+| `icon-4-round-window.svg` | 青花圆窗 | 深钴蓝背景 + 白色圆窗（仿古建筑）+ 窗内青花莲花 |
+| `icon-5-yin-yang-music.svg` | 音乐阴阳 | 阴阳图案 + 上下音符 + 象征音乐的动静对立统一 |
+| `icon-6-vase-music.svg` | 青花花瓶 | 白色花瓶 + 瓶内梅花枝青花 + 音符从瓶口飘出 |
+
+### 文件
+- `icon-1-porcelain-disc.svg` ~ `icon-6-vase-music.svg` — 6 张 SVG 图标
+
+---
+
+## 19. 设计令牌文档
+
+### 任务
+创建设计令牌文档，记录颜色、字号、间距、圆角等视觉规范，方便 AI 持续开发时参考。
+
+### 内容
+
+生成 `design-tokens.md`，包含 11 个章节：
+
+| 章节 | 内容 |
+|------|------|
+| **1. 色彩系统** | 13 个颜色 token + 5 种语义色 + 不透明度规范 + 使用频率统计 |
+| **2. 字体系统** | 16 级字号层级（8pt~20pt）+ 场景速查表 |
+| **3. 间距系统** | 内边距 6 档 + 元素间距 10 档 + 尺寸规范表 |
+| **4. 圆角系统** | 8 档（1pt~50%） |
+| **5. 描边/边框** | 7 种描边样式 |
+| **6. 阴影** | 2 种标准阴影参数 |
+| **7. 布局规范** | macOS 主布局 ASCII 图 + 弹性列规则 + 背景分层 |
+| **8. 动效规范** | EQ 动画、hover、拖拽动效参数 |
+| **9. 交互规范** | 点击行为、播放模式、上一首/下一首逻辑表 |
+| **10. Swift 代码模式** | 6 种标准组件的 Swift 代码模板 |
+| **11. 图标尺寸** | 各场景图标字号和颜色 |
+
+### 文件
+- `design-tokens.md` — 完整设计令牌文档（548 行）

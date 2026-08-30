@@ -19,6 +19,10 @@ final class PlayerViewModel: ObservableObject {
     @Published var repeatMode: RepeatMode = .off
     @Published var equalizerSettings: EqualizerSettings = .default
     
+    // 歌词：优先从歌曲自带，否则自动在线搜索
+    @Published var currentLyrics: String? = nil
+    @Published var isLyricsLoading: Bool = false
+    
     private var cancellables = Set<AnyCancellable>()
     let player = AudioPlayerManager.shared
     
@@ -51,6 +55,37 @@ final class PlayerViewModel: ObservableObject {
             .assign(to: &$repeatMode)
         player.$equalizerSettings
             .assign(to: &$equalizerSettings)
+        
+        // 歌曲切换时自动获取歌词
+        player.$currentSong
+            .compactMap { $0 }
+            .removeDuplicates(by: { $0.id == $1.id })
+            .sink { [weak self] song in
+                self?.fetchLyrics(for: song)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func fetchLyrics(for song: Song) {
+        // 歌曲自带歌词，直接使用
+        if let embedded = song.lyrics, !embedded.isEmpty {
+            currentLyrics = embedded
+            isLyricsLoading = false
+            return
+        }
+        
+        // 自动在线搜索
+        isLyricsLoading = true
+        currentLyrics = nil
+        
+        Task {
+            let lyrics = await LyricsService.shared.getLyrics(for: song)
+            // 确保仍然是同一首歌（防止切歌后覆盖）
+            if player.currentSong?.id == song.id {
+                currentLyrics = lyrics
+                isLyricsLoading = false
+            }
+        }
     }
     
     var currentSong: Song? {

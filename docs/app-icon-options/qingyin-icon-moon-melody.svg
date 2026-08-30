@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
+  <title>清音：月下旋律</title>
+  <rect width="1024" height="1024" fill="#F2ECE0"/>
+  <path d="M52 721c99-69 191-74 276-14 98 69 186 68 276-3 95-75 207-70 368 20v248H52Z" fill="#D8EBE6"/>
+  <path d="M52 780c96-64 190-65 282-4 95 63 185 62 273-3 102-75 216-73 365 6" fill="none" stroke="#6A9E96" stroke-width="22"/>
+  <path d="M197 328c0-155 126-281 281-281 116 0 216 70 258 170-45-38-103-61-166-61-142 0-257 115-257 257 0 64 23 121 61 166-103-43-177-144-177-251Z" fill="#1A4B8C"/>
+  <path d="M297 313c23-52 59-93 109-122M327 443c7 41 24 79 51 113" fill="none" stroke="#D6E4F2" stroke-width="18" stroke-linecap="round"/>
+  <path d="M494 342v236c0 37 31 57 66 46 25-8 39-30 39-54V321l160-40v221c0 37 31 57 66 46 25-8 39-30 39-54V203l-265 66v249c-18-15-44-20-68-12-25 8-39 30-39 54 0 25 14 46 36 52" fill="#1A4B8C"/>
+  <g fill="#2A6CB8">
+    <circle cx="237" cy="627" r="17"/>
+    <circle cx="813" cy="664" r="13"/>
+    <circle cx="736" cy="746" r="19"/>
+  </g>
+  <path d="M110 127h109M164 73v109M818 127h96M866 79v96" stroke="#6A9E96" stroke-width="15" stroke-linecap="round"/>
+</svg>

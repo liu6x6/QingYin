@@ -72,7 +72,9 @@ struct iOSContentView: View {
 // MARK: - macOS View
 struct MacContentView: View {
     @EnvironmentObject var libraryViewModel: LibraryViewModel
+    @EnvironmentObject var playerViewModel: PlayerViewModel
     @State private var selectedSection: MacSidebarSection = .songs
+    @State private var showLyricsPanel: Bool = false
     
     enum MacSidebarSection: String, CaseIterable, Identifiable {
         case songs = "歌曲"
@@ -186,7 +188,17 @@ struct MacContentView: View {
             }
             
             // 底部播放条
-            MacPlayerBar()
+            MacPlayerBar(onArtworkTap: {
+                guard playerViewModel.currentSong != nil else { return }
+                showLyricsPanel.toggle()
+            })
+        }
+        .overlay {
+            if showLyricsPanel {
+                LyricsPanelView(onClose: { showLyricsPanel = false })
+                    .transition(.opacity)
+                    .zIndex(100)
+            }
         }
         .background(QingYinColors.porcelain)
     }

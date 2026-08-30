@@ -10,6 +10,10 @@ struct LyricsView: View {
     @State private var parsedLyrics: [LyricsLine] = []
     @State private var currentIndex: Int? = nil
     
+    private var lyricsText: String? {
+        playerViewModel.currentLyrics ?? playerViewModel.currentSong?.lyrics
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             // 顶部标题
@@ -27,12 +31,20 @@ struct LyricsView: View {
             if parsedLyrics.isEmpty {
                 Spacer()
                 VStack(spacing: 12) {
-                    Image(systemName: "quote.bubble")
-                        .font(.system(size: 36, weight: .light))
-                        .foregroundColor(QingYinColors.cobalt.opacity(0.3))
-                    Text("暂无歌词")
-                        .font(.system(size: 14))
-                        .foregroundColor(QingYinColors.inkMist)
+                    if playerViewModel.isLyricsLoading {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle())
+                        Text("搜索歌词中...")
+                            .font(.system(size: 13))
+                            .foregroundColor(QingYinColors.inkMist)
+                    } else {
+                        Image(systemName: "quote.bubble")
+                            .font(.system(size: 36, weight: .light))
+                            .foregroundColor(QingYinColors.cobalt.opacity(0.3))
+                        Text("暂无歌词")
+                            .font(.system(size: 14))
+                            .foregroundColor(QingYinColors.inkMist)
+                    }
                 }
                 Spacer()
             } else {
@@ -68,13 +80,16 @@ struct LyricsView: View {
         .onChange(of: playerViewModel.currentSong) { _ in
             loadLyrics()
         }
+        .onChange(of: playerViewModel.currentLyrics) { _ in
+            loadLyrics()
+        }
         .onReceive(playerViewModel.player.$currentTime) { time in
             updateCurrentIndex(time: time)
         }
     }
     
     private func loadLyrics() {
-        if let lyrics = playerViewModel.currentSong?.lyrics, !lyrics.isEmpty {
+        if let lyrics = lyricsText, !lyrics.isEmpty {
             parsedLyrics = LyricsParser.parse(lyrics)
         } else {
             parsedLyrics = []

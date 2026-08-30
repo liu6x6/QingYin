@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="porcelainBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#faf6f0"/>
+      <stop offset="100%" style="stop-color:#f8f4ec"/>
+    </radialGradient>
+    <radialGradient id="discGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#2a6cb8"/>
+      <stop offset="70%" style="stop-color:#1a4b8c"/>
+      <stop offset="100%" style="stop-color:#0f3a6f"/>
+    </radialGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+      <feOffset dx="0" dy="4"/>
+      <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix values="0 0 0 0 0.1 0 0 0 0 0.3 0 0 0 0 0.55 0 0 0 0.15 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- 瓷白背景圆 -->
+  <circle cx="512" cy="512" r="480" fill="url(#porcelainBg)" stroke="#e8e0d0" stroke-width="2"/>
+  
+  <!-- 钴蓝唱片外环 -->
+  <circle cx="512" cy="512" r="380" fill="url(#discGrad)" filter="url(#shadow)"/>
+  
+  <!-- 唱片纹理（同心圆） -->
+  <circle cx="512" cy="512" r="360" fill="none" stroke="#2a6cb8" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="512" cy="512" r="340" fill="none" stroke="#2a6cb8" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="512" cy="512" r="320" fill="none" stroke="#2a6cb8" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="512" cy="512" r="300" fill="none" stroke="#2a6cb8" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="512" cy="512" r="280" fill="none" stroke="#2a6cb8" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="512" cy="512" r="260" fill="none" stroke="#2a6cb8" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="512" cy="512" r="240" fill="none" stroke="#2a6cb8" stroke-width="0.5" opacity="0.3"/>
+  
+  <!-- 青花瓷中心圆盘 -->
+  <circle cx="512" cy="512" r="200" fill="#f8f4ec" stroke="#1a4b8c" stroke-width="3"/>
+  <circle cx="512" cy="512" r="180" fill="none" stroke="#1a4b8c" stroke-width="1" opacity="0.4"/>
+  
+  <!-- 青花瓷花纹图案（中心） -->
+  <!-- 中心莲花 -->
+  <g transform="translate(512,512)">
+    <!-- 外圈花瓣 -->
+    <g opacity="0.8">
+      <ellipse cx="0" cy="-70" rx="18" ry="35" fill="#1a4b8c" transform="rotate(0)"/>
+      <ellipse cx="0" cy="-70" rx="18" ry="35" fill="#1a4b8c" transform="rotate(45)"/>
+      <ellipse cx="0" cy="-70" rx="18" ry="35" fill="#1a4b8c" transform="rotate(90)"/>
+      <ellipse cx="0" cy="-70" rx="18" ry="35" fill="#1a4b8c" transform="rotate(135)"/>
+      <ellipse cx="0" cy="-70" rx="18" ry="35" fill="#1a4b8c" transform="rotate(180)"/>
+      <ellipse cx="0" cy="-70" rx="18" ry="35" fill="#1a4b8c" transform="rotate(225)"/>
+      <ellipse cx="0" cy="-70" rx="18" ry="35" fill="#1a4b8c" transform="rotate(270)"/>
+      <ellipse cx="0" cy="-70" rx="18" ry="35" fill="#1a4b8c" transform="rotate(315)"/>
+    </g>
+    <!-- 内圈花瓣 -->
+    <g opacity="0.6">
+      <ellipse cx="0" cy="-40" rx="12" ry="25" fill="#2a6cb8" transform="rotate(22.5)"/>
+      <ellipse cx="0" cy="-40" rx="12" ry="25" fill="#2a6cb8" transform="rotate(67.5)"/>
+      <ellipse cx="0" cy="-40" rx="12" ry="25" fill="#2a6cb8" transform="rotate(112.5)"/>
+      <ellipse cx="0" cy="-40" rx="12" ry="25" fill="#2a6cb8" transform="rotate(157.5)"/>
+      <ellipse cx="0" cy="-40" rx="12" ry="25" fill="#2a6cb8" transform="rotate(202.5)"/>
+      <ellipse cx="0" cy="-40" rx="12" ry="25" fill="#2a6cb8" transform="rotate(247.5)"/>
+      <ellipse cx="0" cy="-40" rx="12" ry="25" fill="#2a6cb8" transform="rotate(292.5)"/>
+      <ellipse cx="0" cy="-40" rx="12" ry="25" fill="#2a6cb8" transform="rotate(337.5)"/>
+    </g>
+    <!-- 中心 -->
+    <circle cx="0" cy="0" r="15" fill="#1a4b8c"/>
+  </g>
+  
+  <!-- 唱片孔 -->
+  <circle cx="512" cy="512" r="12" fill="#f8f4ec" stroke="#1a4b8c" stroke-width="2"/>
+  
+  <!-- 音符装饰（右上角） -->
+  <g transform="translate(780,280) scale(0.8)" fill="#1a4b8c" opacity="0.9">
+    <ellipse cx="0" cy="0" rx="22" ry="16" transform="rotate(-20)"/>
+    <rect x="14" y="-80" width="5" height="80"/>
+    <path d="M19,-80 Q35,-90 35,-65 Q35,-55 25,-50" fill="none" stroke="#1a4b8c" stroke-width="4"/>
+  </g>
+  
+  <!-- 音符装饰（左下角） -->
+  <g transform="translate(260,750) scale(0.6)" fill="#6a9e96" opacity="0.7">
+    <ellipse cx="0" cy="0" rx="18" ry="13" transform="rotate(-15)"/>
+    <rect x="12" y="-60" width="4" height="60"/>
+  </g>
+  
+  <!-- 外框装饰环 -->
+  <circle cx="512" cy="512" r="470" fill="none" stroke="#1a4b8c" stroke-width="1" opacity="0.15"/>
+  <circle cx="512" cy="512" r="465" fill="none" stroke="#1a4b8c" stroke-width="0.5" opacity="0.1" stroke-dasharray="8,4"/>
+</svg>

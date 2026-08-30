@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8f4ec"/>
+      <stop offset="100%" style="stop-color:#f2ece0"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect x="0" y="0" width="1024" height="1024" fill="url(#bg5)"/>
+  
+  <!-- 中心太极/阴阳音乐图案 -->
+  <g transform="translate(512,460)">
+    <!-- 外圆 -->
+    <circle cx="0" cy="0" r="280" fill="none" stroke="#1a4b8c" stroke-width="4" opacity="0.2"/>
+    
+    <!-- 上半圆 - 钴蓝 -->
+    <path d="M-260,0 A260,260 0 0,1 260,0 A130,130 0 0,1 0,0 A130,130 0 0,0 -260,0 Z" fill="#1a4b8c"/>
+    <!-- 下半圆 - 瓷白 -->
+    <path d="M260,0 A260,260 0 0,1 -260,0 A130,130 0 0,1 0,0 A130,130 0 0,0 260,0 Z" fill="#f8f4ec" stroke="#1a4b8c" stroke-width="3"/>
+    
+    <!-- 蓝色区域内的白色音符 -->
+    <g transform="translate(-60,-80) scale(0.6)" fill="#f8f4ec">
+      <ellipse cx="0" cy="0" rx="30" ry="20" transform="rotate(-20)"/>
+      <rect x="18" y="-60" width="7" height="60"/>
+      <path d="M25,-60 Q45,-70 45,-50" fill="none" stroke="#f8f4ec" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    
+    <!-- 白色区域内的蓝色音符 -->
+    <g transform="translate(60,80) scale(0.6)" fill="#1a4b8c">
+      <ellipse cx="0" cy="0" rx="30" ry="20" transform="rotate(-20)"/>
+      <rect x="18" y="-60" width="7" height="60"/>
+      <path d="M25,-60 Q45,-70 45,-50" fill="none" stroke="#1a4b8c" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    
+    <!-- 蓝色区域内的小圆点（白） -->
+    <circle cx="0" cy="-130" r="20" fill="#f8f4ec"/>
+    <!-- 白色区域内的小圆点（蓝） -->
+    <circle cx="0" cy="130" r="20" fill="#1a4b8c"/>
+  </g>
+  
+  <!-- 周围装饰音符 -->
+  <g opacity="0.2">
+    <!-- 左上 -->
+    <g transform="translate(180,200) scale(0.4)" fill="#6a9e96">
+      <ellipse cx="0" cy="0" rx="20" ry="14" transform="rotate(-15)"/>
+      <rect x="12" y="-40" width="4" height="40"/>
+    </g>
+    <!-- 右上 -->
+    <g transform="translate(840,200) scale(0.35)" fill="#1a4b8c">
+      <ellipse cx="0" cy="0" rx="20" ry="14" transform="rotate(-15)"/>
+      <rect x="12" y="-40" width="4" height="40"/>
+    </g>
+    <!-- 左下 -->
+    <g transform="translate(180,720) scale(0.35)" fill="#1a4b8c">
+      <ellipse cx="0" cy="0" rx="20" ry="14" transform="rotate(-15)"/>
+      <rect x="12" y="-40" width="4" height="40"/>
+    </g>
+    <!-- 右下 -->
+    <g transform="translate(840,720) scale(0.4)" fill="#6a9e96">
+      <ellipse cx="0" cy="0" rx="20" ry="14" transform="rotate(-15)"/>
+      <rect x="12" y="-40" width="4" height="40"/>
+    </g>
+  </g>
+  
+  <!-- 水波纹底部装饰 -->
+  <g opacity="0.12">
+    <path d="M100,850 Q200,830 300,850 Q400,870 500,850 Q600,830 700,850 Q800,870 900,850" fill="none" stroke="#6a9e96" stroke-width="3"/>
+    <path d="M150,870 Q250,850 350,870 Q450,890 550,870 Q650,850 750,870 Q850,890 950,870" fill="none" stroke="#6a9e96" stroke-width="2"/>
+  </g>
+</svg>

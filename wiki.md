@@ -42,6 +42,7 @@
 | 喜欢 | 收藏歌曲，持久化到 UserDefaults + iCloud |
 | 播放列表 | 创建/管理播放列表，歌曲按 ID 关联 |
 | 歌词 | LRC 歌词解析与同步显示 |
+| 歌词自动搜索 | 基于 LRCLIB API 在线搜索歌词，本地缓存 |
 | 音量控制 | 拖拽式音量条 |
 | 搜索 | 按标题/艺术家/专辑实时筛选 |
 | 启动恢复 | 下次打开自动选中上次播放的歌曲和时间 |
@@ -52,7 +53,7 @@
 | 技术 | 用途 |
 |------|------|
 | SwiftUI | 全平台 UI 框架 |
-| AVFoundation (AVPlayer) | 音频播放引擎 |
+| AVFoundation (AVAudioEngine) | 音频播放引擎 |
 | Combine | 响应式状态管理、属性转发 |
 | MediaPlayer (iOS) | 系统音乐库访问 |
 | UniformTypeIdentifiers | 文件导入/拖拽类型匹配 |
@@ -117,12 +118,13 @@ QingYin/
 │   └── Playlist.swift               # 播放列表模型
 │
 ├── Services/
-│   ├── AudioPlayerManager.swift     # 音频播放核心（AVPlayer 单例）
+│   ├── AudioPlayerManager.swift     # 音频播放核心（AVAudioEngine 单例）
 │   ├── LocalFileService.swift       # 本地文件导入、扫描、删除
 │   ├── MusicLibraryService.swift    # iOS 系统音乐库访问
 │   ├── AppleMusicMacService.swift   # macOS ~/Music 目录扫描
 │   ├── AudioMetadataExtractor.swift # ID3 元数据提取（标题/艺术家/专辑/封面）
 │   ├── LyricsParser.swift           # LRC 歌词解析
+│   ├── LyricsService.swift          # 歌词在线搜索（LRCLIB）与本地缓存
 │   └── iCloudSyncService.swift      # iCloud 同步（播放列表/喜欢）
 │
 ├── ViewModels/
@@ -133,6 +135,8 @@ QingYin/
 │   ├── ContentView.swift            # 主入口，iOS/macOS 分支
 │   ├── MacLibraryView.swift         # macOS 歌曲列表（自定义表头、列宽、拖拽排序）
 │   ├── MacPlayerBar.swift           # macOS 底部播放控制条 + ProgressSlider 组件
+│   ├── LyricsPanelView.swift        # 全屏歌词面板（左播放器 + 右歌词）
+│   ├── EqualizerView.swift          # 十段均衡器调节界面
 │   ├── LibraryView.swift            # iOS 歌曲列表
 │   ├── MiniPlayerView.swift         # iOS 迷你播放器
 │   ├── NowPlayingView.swift         # 全屏正在播放页面
@@ -140,7 +144,7 @@ QingYin/
 │   ├── FavoritesView.swift          # 我喜欢的歌曲
 │   ├── PlaylistView.swift           # 播放列表网格
 │   ├── QueueView.swift              # 播放队列（支持拖拽排序）
-│   ├── LyricsView.swift             # 歌词显示
+│   ├── LyricsView.swift             # 歌词显示（iOS sheet）
 │   ├── SearchView.swift             # 搜索页面
 │   └── SettingsView.swift           # 设置页面
 │
@@ -194,7 +198,7 @@ struct Playlist: Identifiable, Equatable, Codable {
 
 ### AudioPlayerManager（单例）
 
-音频播放核心，封装 AVPlayer。
+音频播放核心，基于 `AVAudioEngine + AVAudioPlayerNode + AVAudioUnitEQ`，支持实时均衡器。
 
 | 属性 | 类型 | 说明 |
 |------|------|------|
@@ -208,6 +212,7 @@ struct Playlist: Identifiable, Equatable, Codable {
 | `isShuffleOn` | `@Published Bool` | 随机播放开关 |
 | `repeatMode` | `@Published RepeatMode` | .off / .all / .one |
 | `volume` | `@Published Float` | 音量 0.0~1.0 |
+| `equalizerSettings` | `@Published EqualizerSettings` | 均衡器设置 |
 
 **核心方法**:
 
@@ -222,6 +227,8 @@ struct Playlist: Identifiable, Equatable, Codable {
 | `cycleRepeatMode()` | 循环模式: off → all → one → off |
 | `restoreLastPlayed(from:)` | 恢复上次播放的歌曲和位置 |
 
+**播放引擎**：`AVAudioEngine` + `AVAudioPlayerNode` + `AVAudioUnitEQ`（十段均衡器）。
+
 **Seek 保护机制**:  
 `lastSeekWallTime` 时间戳锁 — seek 后 1.5 秒内 periodic observer 不更新 `currentTime`/`progress`，防止旧值覆盖拖拽位置。
 
@@ -231,9 +238,10 @@ struct Playlist: Identifiable, Equatable, Codable {
 **保存时机**:
 - `$currentSong` 变化 → 保存 song ID
 - `$playbackState` → paused/stopped → 保存播放时间
-- `$currentTime` throttle 5s → 定期保存
-- APP 关闭通知 → 保存播放时间
+- `$currentTime` + `updatePlaybackProgress()` 每 5 秒保存
+- APP 关闭/失去焦点通知 → 保存播放时间
 - `$isShuffleOn` / `$repeatMode` → 保存设置
+- **核心保护**：永远不用 0s 覆盖已有的有效位置（防止歌曲播完后重置覆盖）
 
 ### LocalFileService（单例）
 
@@ -269,6 +277,30 @@ struct Playlist: Identifiable, Equatable, Codable {
 
 通过 `NSUbiquitousKeyValueStore` 同步轻量数据：播放列表、喜欢列表、上次播放歌曲。
 
+### LyricsService（单例）
+
+歌词在线搜索与本地缓存服务。
+
+**API**: LRCLIB (`https://lrclib.net/api`)，免费开源歌词 API，无需 API Key。
+
+**搜索策略（三级降级）**:
+1. 精确匹配: `GET /api/get?artist_name=X&track_name=X`
+2. 模糊搜索: `GET /api/search?q={title}`
+3. 组合搜索: `GET /api/search?q={title} {artist}`
+
+**缓存层级**:
+1. 内存缓存 → APP 运行期间
+2. 磁盘缓存 → `Documents/Lyrics/{songID}.lrc`
+3. 网络请求 → LRCLIB API
+
+**方法**:
+
+| 方法 | 说明 |
+|------|------|
+| `getLyrics(for:)` | 获取歌词（缓存优先，自动搜索） |
+| `refreshLyrics(for:)` | 强制重新搜索（忽略缓存） |
+| `clearCache(for:)` | 删除指定歌曲的歌词缓存 |
+
 ---
 
 ## 6. ViewModels 层
@@ -285,7 +317,13 @@ player.$progress     →  $progress
 player.$volume       →  $volume
 player.$isShuffleOn  →  $isShuffleOn
 player.$repeatMode   →  $repeatMode
+player.$equalizerSettings → $equalizerSettings
 ```
+
+**歌词自动获取**:
+- `@Published currentLyrics: String?` — 当前歌词文本
+- `@Published isLyricsLoading: Bool` — 搜索状态
+- 歌曲切换时自动调用 `LyricsService.getLyrics(for:)`
 
 **设计原因**: SwiftUI 通过 `@EnvironmentObject` 观察 ViewModel，但不会追踪引用类型（AudioPlayerManager）内部嵌套的 `@Published`。必须在 ViewModel 层显式转发，UI 才能响应变化。
 
@@ -389,6 +427,8 @@ player.$repeatMode   →  $repeatMode
 └─────────────────────────────────────────────────────────┘
 ```
 
+**封面可点击**：hover 时显示蓝色半透明 + 歌词气泡图标，点击触发 `onArtworkTap` 回调打开歌词面板。
+
 **ProgressSlider 组件**（复用于进度条和音量条）:
 - 轨道 3pt 高（Capsule 形状）
 - 12×12 圆形把手（白色填充 + cobalt 描边 + 阴影）
@@ -404,6 +444,33 @@ player.$repeatMode   →  $repeatMode
 - 播放控制按钮组
 - 音量控制
 - 歌词/队列/分享/收藏底部操作
+
+### LyricsPanelView
+
+全屏歌词面板（macOS），点击底部播放条封面打开。
+
+**布局**：
+```
+┌─ 全屏覆盖 ────────────────────────────────────────────────┐
+│                                                       [↓] │
+│                                                           │
+│  ┌──────────────┐  ┌──────────────────────────────────┐  │
+│  │ 封面 240×240  │  │  歌词列表（自动同步滚动）        │  │
+│  │              │  │  ▶ 当前行 22pt 蓝色加粗           │  │
+│  │ 歌曲名       │  │  下一行 17pt 渐淡              │  │
+│  │ 艺术家       │  │  ...                             │  │
+│  │              │  │  点击任意行 → 跳转播放位置        │  │
+│  │ [进度条]     │  │                                  │  │
+│  │ ⤮ ◀ ⏸ ▶ 🔁│  │                                  │  │
+│  │ ♥     🔊━━━ │  │                                  │  │
+│  └──────────────┘  └──────────────────────────────────┘  │
+└───────────────────────────────────────────────────────────┘
+```
+
+- 直接监听 `AudioPlayerManager.$currentTime`（绕过 macOS `#if` 限制）
+- 当前行自动滚动到视觉中心（`ScrollViewReader` + `anchor: .center`）
+- 歌词行按距离当前行的远近渐淡显示
+- 点击歌词行跳转到对应播放时间，暂停状态自动恢复播放
 
 ---
 
@@ -434,7 +501,8 @@ player.$repeatMode   →  $repeatMode
 | 路径 | 内容 |
 |------|------|
 | `Documents/Audio/` | 导入的音频文件副本 |
-| `Documents/Audio/*.lrc` | 同名歌词文件 |
+| `Documents/Audio/*.lrc` | 同名歌词文件（本地） |
+| `Documents/Lyrics/` | 自动搜索下载的歌词缓存 (`{songID}.lrc`) |
 
 ---
 
@@ -528,11 +596,10 @@ xcodebuild -project QingYin.xcodeproj -scheme QingYin_iOS \
 | 限制 | 说明 |
 |------|------|
 | 无网络流媒体 | 仅支持本地文件和系统音乐库 |
-| 无均衡器 | 无 EQ 调节功能 |
-| 歌词无自动滚动 | LyricsView 需手动实现同步高亮 |
 | iOS 端功能不完整 | MacLibraryView 的自定义表头/列宽仅 macOS |
 | 无 AirPlay | 未实现投屏播放 |
 | 无 MiniPlayer 窗口 | macOS 无独立小窗口模式 |
+| 歌词来源有限 | LRCLIB 开源社区，冷门歌曲可能找不到 |
 
 ### 可考虑的 TODO
 
@@ -545,4 +612,6 @@ xcodebuild -project QingYin.xcodeproj -scheme QingYin_iOS \
 - [ ] 歌曲标签编辑（ID3 tag 写入）
 - [ ] 智能播放列表（按规则自动聚合）
 - [ ] 导出播放列表为 M3U
+- [ ] 手动搜索/编辑歌词
+- [ ] 多歌词源备选（LRCLIB 失败时切换）
 - [ ] 单元测试 / UI 测试
